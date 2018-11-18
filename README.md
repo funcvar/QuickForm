@@ -1,3 +1,5 @@
-# QuickForm
+# QuickForm 3
 
-test
+Joomla Form Creator
+
+QuickForm 3 can create dynamic forms.
