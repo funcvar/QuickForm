@@ -1,0 +1,347 @@
+/**
+* @package		Joomla & QuickForm
+* @Copyright ((c) juice-lab.ru
+* @license    GNU/GPL
+*/
+#toolbar-iconaddfild button {
+  border-radius: 16px;
+  margin-left: 10px;
+}
+
+#toolbar-iconaddfild button .icon-iconaddfild {
+  background: none;
+  border: none;
+  background-image: url("iconaddfild.png");
+  background-repeat: no-repeat;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  margin: 7px 0 0;
+}
+
+#toolbar-iconaddfild {
+  position: relative;
+}
+
+#qfmenu {
+  margin-top: 10px;
+  list-style: none;
+  background: #111;
+  border-radius: 5px;
+  position: absolute;
+  font-size: 14px;
+  width: 130px;
+}
+
+#qfmenu li {
+  padding: 5px 0 0 0;
+  float: left;
+  position: relative;
+  width: 100%;
+}
+
+#qfmenu a {
+  float: left;
+  height: 25px;
+  padding: 0 15px;
+  color: #FFF;
+  text-decoration: none;
+  text-shadow: none;
+}
+
+#qfmenu li:hover>ul {
+  display: block;
+}
+
+#qfmenu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: none;
+  position: absolute;
+  top: -5px;
+  left: 125px;
+  z-index: 99999;
+  background: #444;
+  border-radius: 5px;
+  border: 2px solid #999;
+  width: 130px;
+}
+
+#qfmenu ul li {
+  float: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+#qfmenu ul a {
+  padding: 10px;
+  height: auto;
+  line-height: 1;
+  display: block;
+  white-space: nowrap;
+  float: none;
+}
+
+#qfmenu li:hover {
+  background: #0186ba;
+}
+
+.formdiv {
+  margin-left: 180px;
+  width: 820px;
+}
+
+#formtbl {
+  margin-top: 40px;
+  width: 100%;
+}
+
+#formtbl td {
+  padding: 5px 10px;
+  border: 1px solid #F0F0F0;
+  vertical-align: top;
+  min-width: 14px;
+}
+
+#formtbl th {
+  padding: 5px 10px;
+  border: 1px solid #FFF;
+  background-color: #F0F0F0;
+  text-align: left;
+}
+
+td.r_td {
+  white-space: nowrap;
+}
+
+.atr_td img {
+  width: 16px;
+  opacity: 0.6;
+}
+
+.atr_td a {
+  cursor: row-resize;
+}
+
+.del_td img {
+  width: 10px;
+  opacity: 0.6;
+}
+
+textarea.customphp {
+  width: 95%;
+  height: 200px;
+}
+
+#formtbl img:hover {
+  opacity: 1;
+}
+
+.qflabelclass {
+  width: 500px;
+}
+
+.optionsBox img {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  opacity: 0.6;
+}
+
+.optionsBox a {
+  margin-left: 15px;
+}
+
+.optionsBox {
+  padding: 5px 0 5px 10px;
+}
+
+.optionRow {
+  padding: 3px 0 3px 10px;
+}
+
+.optionsBox input {
+  width: 300px;
+}
+
+.hid {
+  display: none;
+}
+
+.boxsetting {
+  width: 500px;
+  height: 300px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -250px;
+  margin-top: -150px;
+  border: 2px solid #CCC;
+  background-color: #FDFDFD;
+  padding: 5px;
+}
+
+.boxdelete, .boxsave {
+  display: block;
+  float: right;
+  padding: 5px;
+}
+
+.boxdelete img, .boxsave img {
+  width: 12px;
+  height: 12px;
+  opacity: 0.6;
+}
+
+.boxdelete img:hover, .boxsave img:hover {
+  opacity: 1;
+}
+
+.boxtitle {
+  padding: 5px 10px;
+  font-size: 120%;
+  float: none;
+  min-height: 25px;
+}
+
+.boxinner {
+  width: 100%;
+}
+
+.boxinnerleft {
+  width: 38%;
+  border-top: 1px solid #CCC;
+  border-left: 1px solid #CCC;
+  box-sizing: border-box;
+  float: left;
+}
+
+.boxinnerright {
+  float: left;
+  width: 62%;
+  border: 1px solid #CCC;
+  box-sizing: border-box;
+  height: 260px;
+  background-color: #FFF;
+}
+
+.boxmenu {
+  border-bottom: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  padding: 3px;
+  position: relative;
+  left: 1px;
+  cursor: default;
+}
+
+.boxmenu.activ {
+  background-color: #FFF;
+  border-right: none;
+}
+
+.boxbody {
+  display: none;
+  padding: 10px;
+  position: relative;
+}
+
+.boxbody.activ {
+  display: block;
+}
+
+.boxbodyinner {
+  padding: 10px;
+}
+
+.boxbodyinner hr {
+  margin: 10px 0;
+}
+
+.boxbodyinnerhelp {
+  padding-bottom: 10px;
+}
+
+.boxbodyinner div {
+  padding-bottom: 5px;
+}
+
+.leb, .leb2 {
+  padding-left: 5px;
+}
+.lebt {
+  width: 70px;
+  text-align: right;
+  display: inline-block;
+}
+
+.leb a {
+  text-decoration: none !important;
+  color: #000000;
+}
+
+.leb2 {
+  width: auto;
+}
+.qfsmoll{
+  float: right;
+  font-size: 0.7em;
+  position: relative;
+  margin-bottom: -1.6em;
+  color: #a17433;
+}
+.l_td textarea{
+  color: coral;
+}
+
+.boxbodyinner div input[type="text"] {
+  width: 120px;
+  height: 12px;
+  margin-left: 5px;
+  margin-bottom: 0px;
+}
+
+.req {
+  background-color: #FFF4F4;
+}
+
+.calc {
+  background-color: #effff2 !important;
+}
+
+input.related {
+  border: 1px solid #747ae1 !important;
+}
+
+.customfield {
+  width: 100%;
+  height: 100px;
+}
+
+.boxinnerright .related-fields {
+  /* height: 240px; */
+}
+.boxinnerright .calculator{
+  background-color: #effff2;
+  height: 240px;
+}
+
+@media screen and (max-width:1024px) {
+  .formdiv {
+    margin-left: 0px;
+    width: 100%;
+  }
+
+  .qflabelclass {
+    width: 400px;
+  }
+
+  .optionsBox input {
+    width: 300px;
+  }
+
+  .optionRow {
+    padding: 3px 0 3px 5px;
+  }
+}

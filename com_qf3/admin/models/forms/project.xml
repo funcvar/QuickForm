@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+
+	<fieldset name="general" label="QF_GLOBAL_SETTINGS">
+		<field name="title" type="text" label="JGLOBAL_TITLE" description="JFIELD_TITLE_DESC" class="input-xxlarge input-large-text" size="40" required="true"/>
+		<field name="id" type="number" label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC" class="readonly" size="10" default="0" readonly="true"/>
+		<field name="published" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="chzn-color-state" filter="intval" size="1" default="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+		</field>
+		<field name="access" type="accesslevel" label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC" size="1"/>
+		<field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL" description="">
+			<option value="*">JALL</option>
+		</field>
+		<field name="hits" type="number" label="QF_HITS" description="" class="readonly" size="6" readonly="true" filter="unset"/>
+	</fieldset>
+
+	<fields name="formparams" label="QF_FORM_SETTINGS">
+		<fieldset name="formparamsset" label="QF_FORM_SETTINGS">
+			<field name="cssform" type="cssfile" label="QF_STYLES" description="QF_CSS_FILE_DESK" size="1" default="default.css"/>
+			<field name="jsform" type="jsfile" label="QF_JS" description="QF_JS_FILE_DESK" size="1" default="default.js"/>
+			<field name="modal" type="list" label="QF_MODAL" description="" default="0">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="modallink" type="text" size="40" label="QF_MODAL_LINK" description=""/>
+			<field name="ajaxform" type="list" label="QF_AJAX" description="" default="0">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="qfkeepalive" type="list" label="keepalive" description="QF_KEEPALIVE" default="0">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="autocomplete" type="list" label="autocomplete" description="" default="off">
+				<option value="on">on</option>
+				<option value="off">off</option>
+			</field>
+			<field name="thnq_message" type="textarea" size="40" label="QF_MESSAGE" description="" default="Thank you for contacting us" required="true"/>
+		</fieldset>
+	</fields>
+
+	<fields name="emailparams" label="QF_GLOBAL_EMAIL">
+		<fieldset name="emailparamsset" label="QF_GLOBAL_EMAIL">
+			<field name="toemail" type="text" size="40" label="JGLOBAL_EMAIL" description="QF_EMAIL_DESK"/>
+			<field name="subject" type="text" size="40" label="QF_SUBJECT" description=""/>
+			<field name="tmpl" type="tmpllist" label="QF_LETTER_TMPL" description="" size="1" default="default"/>
+			<field name="showtitle" type="list" label="QF_SHOWTITLE" description="QF_SHOWTITLE_DESK" default="0">
+				<option value="0">JYES</option>
+				<option value="1">JNO</option>
+			</field>
+			<field name="showurl" type="list" label="QF_SHOWURL" description="" default="0">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="start_text" type="textarea" size="40" label="QF_EMAIL_START_TEXT" description="QF_EMAIL_START_TEXT_DEF" default="" filter="raw"/>
+			<field name="final_text" type="textarea" size="40" label="QF_EMAIL_FINAL_TEXT" description="" default="" filter="raw"/>
+		</fieldset>
+	</fields>
+
+	<fields name="calculatorparams" label="QF_GLOBAL_CALCULATOR">
+		<fieldset name="calculatorparamsset" label="QF_CALCULATOR">
+			<field name="calculatortype" type="radio" label="QF_CALCULATOR_TYPE" description="" class="btn-group btn-group-yesno" default="0">
+				<option value="0">JNO</option>
+				<option value="default">default</option>
+				<option value="multipl">multipl</option>
+				<option value="simple">simple</option>
+				<option value="custom">custom</option>
+			</field>
+			<field name="calculatordesk" type="calculatordesk"/>
+			<field name="calcformula" type="textarea" label="QF_CALCULATOR_FORMUL" description=""/>
+		</fieldset>
+	</fields>
+
+	<fields name="params" label="JGLOBAL_FIELDSET_ADVANCED">
+		<fieldset name="params" label="JGLOBAL_FIELDSET_ADVANCED">
+			<field name="history" type="list" label="QF_RECORD_HISTORY" description="" default="1">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="languagelink" type="text" size="40" label="QF_LANGUAGE_LINK" description="QF_LANGUAGE_LINK_DESC"/>
+			<field name="cartimglink" type="text" size="40" label="QF_CART_IMG_LINK" description="QF_CART_IMG_LINK_DESC"/>
+		</fieldset>
+	</fields>
+
+	<field name="ordering" type="ordering" label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC" content_type="com_qf3.project"/>
+	<field name="checked_out" type="hidden" filter="unset"/>
+	<field name="checked_out_time" type="hidden" filter="unset"/>
+
+</form>
