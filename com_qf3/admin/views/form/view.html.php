@@ -29,8 +29,11 @@ class Qf3ViewForm extends JViewLegacy
             return false;
         }
 
-        JHtml::_('script', 'administrator/components/com_qf3/assets/script.js', array('version' => 'auto'));
-        JHtml::_('stylesheet', 'administrator/components/com_qf3/assets/style.css', array('version' => 'auto'));
+        $xml = JFactory::getXML(JPATH_ADMINISTRATOR .'/components/com_qf3/qf3.xml');
+        $version = preg_replace("/[^0-9]/", '', (string)$xml->version);
+
+        JHtml::_('script', 'administrator/components/com_qf3/assets/script.js', array('version' => $version));
+        JHtml::_('stylesheet', 'administrator/components/com_qf3/assets/style.css', array('version' => $version));
 
         $this->addToolbar();
 
@@ -69,7 +72,7 @@ class Qf3ViewForm extends JViewLegacy
             JToolbarHelper::cancel('form.cancel', 'JTOOLBAR_CLOSE');
         }
 
-        JToolBarHelper::custom('addfild', 'iconaddfild', '', '', false);
+        JToolBarHelper::custom('addfild', 'iconaddfild', '', 'QF_ADD_FIELD', false);
 
         JToolbarHelper::divider();
         JToolBarHelper::help('help', true);

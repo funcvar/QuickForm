@@ -11,7 +11,7 @@ abstract class qfCalculator
 {
     public static function getCalculator($project, $data)
     {
-        if(!$project->calculatorparams->calculatortype) return false;
+        if(!$project->calculated) return false;
 
         $file = JPATH_COMPONENT.'/classes/calculator/'.$project->calculatorparams->calculatortype.'.php';
         if (file_exists($file)) {
@@ -27,7 +27,7 @@ abstract class qfCalculator
     public function checkStr($str)
     {
         $str = str_replace(',', '.', $str);
-        return preg_replace('/[^0-9()-.+\*\/]/', '', $str);
+        return preg_replace('/[^0-9()-.+<>!=:\?\*\/|%&]/', '', $str);
     }
 
     public static function qfErrormes($err = false)

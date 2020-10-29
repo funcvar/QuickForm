@@ -3,10 +3,10 @@
   $(document).ready(function() {
     var cartbox = $('.qf_cart_box');
       cartbox.on('click', function() {
-        $.QFcart.getCartBox();
+        QFcart.getCartBox();
       });
   });
-  return $.QFcart = {
+  return QFcart = {
     getCartBox: function() {
       if ($('.qfcartoverlay').length) {
         $('.qfcartoverlay').remove();
@@ -28,7 +28,7 @@
         },
         success: function(res) {
           box2.append(res);
-          $.QFcart.verticallycentr(box, true);
+          QFcart.verticallycentr(box, true);
           boxActivate(box);
         },
       });
@@ -83,7 +83,7 @@
           }
         })
 
-        var qfforms = $('.qf2form form', box);
+        var qfforms = $('.qf3form form', box);
 
         qfforms.each(function() {
           $.QuickForm3.initiate(this);
@@ -108,7 +108,7 @@
       function activateCartForm(form) {
         form.cartsubmit = function(){
           var dat, n=0;
-          var forms = $('.qf_cart_foot_l .qf2form form');
+          var forms = $('.qf_cart_foot_l .qf3form form');
 
           var valid = true;
           forms.each(function(){
@@ -137,7 +137,7 @@
 
             $.ajax({
               type: 'POST',
-              // url: '/index.php?task=ajax&mod=confirmCart',
+              url: form.root.value,
               data: dat,
               processData: pr,
               contentType: pr,
@@ -177,7 +177,7 @@
 
         for( var u in arr ){
           if (!arr.hasOwnProperty(u)) continue;
-          html += '<div><label class="qf2label">'+QF_TEXT_2+'</label><span class="qfpriceinner">'+$.QuickForm3.strPrice(arr[u])+'</span><span class="qfunitinner">'+u+'</span></div>';
+          html += '<div><label class="qf3label">'+QF_TEXT_2+'</label><span class="qfpriceinner">'+$.QuickForm3.strPrice(arr[u],0)+'</span><span class="qfunitinner">'+u+'</span></div>';
         }
 
         var div = document.createElement('div');
@@ -188,7 +188,7 @@
 
       function checkforfinalprice(form){
 
-        $('.qfprice', form).each(function(){
+        $('.qfcalculatorsum', form).each(function(){
           var div = document.createElement('div');
           div.className = "finalpricerow";
           div.innerHTML = this.innerHTML;
@@ -267,7 +267,7 @@
     },
 
     cartnext: function(){
-      var fs = $('#qf_delivery .qf2form form').add($('#qf_payment .qf2form form'));
+      var fs = $('#qf_delivery .qf3form form').add($('#qf_payment .qf3form form'));
       var valid = true;
       fs.each(function(){
         if(!this.checkValidity()) {
@@ -289,7 +289,7 @@
         }).animate({
           'opacity': 1
         }, 100, function(){
-          $.QFcart.verticallycentr(box, true);
+          QFcart.verticallycentr(box, true);
         });
 
       });
@@ -307,7 +307,7 @@
         url: form.root.value,
         data: $(form).serialize() + '&task=ajax&mod=ajaxminicart',
         success: function(res) {
-          $.QFcart.updateMiniCart(res);
+          QFcart.updateMiniCart(res);
         }
       });
       return false;
@@ -375,7 +375,7 @@
               'opacity': 0
             }, 600);
           }).on('click', function() {
-            $.QFcart.getCartBox();
+            QFcart.getCartBox();
           });
         } else {
           shuttle.html(res);

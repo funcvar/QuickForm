@@ -88,9 +88,9 @@ class qfCart
 
             foreach ($row['sum'] as $sum) {
                 if ($sumsize > 1) {
-                    $html .= $sum[1][0].' ';
+                    $html .= $sum[1]->label.' ';
                 }
-                $html .= number_format($sum[0], $sum[1][3], ',', ' ') . ' ' . $sum[1][1].'<br>';
+                $html .= number_format($sum[0], $sum[1]->fixed, ',', ' ') . ' ' . $sum[1]->unit.'<br>';
             }
             $html .= '</td>';
 
@@ -101,8 +101,8 @@ class qfCart
             $html .= '<td class="qf_td_6" style="white-space: nowrap">';
             if ($sumsize == 1) {
                 $sum = $row['sum'][0][0];
-                $currency = $row['sum'][0][1][1];
-                $html .= number_format($row['qt']*$sum, $row['sum'][0][1][3], ',', ' ') . ' ' . $currency;
+                $currency = $row['sum'][0][1]->unit;
+                $html .= number_format($row['qt']*$sum, $row['sum'][0][1]->fixed, ',', ' ') . ' ' . $currency;
                 if (!isset($rowssum[$currency])) {
                     $rowssum[$currency] = $row['qt']*$sum;
                 } else {
@@ -127,10 +127,10 @@ class qfCart
             $html .= '</td>';
             $html .= '<td style="white-space: nowrap">';
 
-            if ($row['sum'] && isset($row['sum'][0][1][3]) && sizeof($row['sum']) == 1) {
+            if ($row['sum'] && isset($row['sum'][0][1]->fixed) && sizeof($row['sum']) == 1) {
                 $sum = $row['sum'][0][0];
-                $currency = $row['sum'][0][1][1];
-                $html .= number_format($sum, $row['sum'][0][1][3], ',', ' ') . ' ' . $currency;
+                $currency = $row['sum'][0][1]->unit;
+                $html .= number_format($sum, $row['sum'][0][1]->fixed, ',', ' ') . ' ' . $currency;
                 if (!isset($rowssum[$currency])) {
                     $rowssum[$currency] = $sum;
                 } else {
@@ -227,6 +227,7 @@ class qfCart
         }
 
         $data = $qfFilds->getData($project->id);
+        $project->calculated = $qfFilds->calculated && $project->calculatorparams->calculatortype;
         $sum = qfCalculator::getCalculator($project, $data);
 
         $aid = array();
@@ -275,6 +276,7 @@ class qfCart
         if (!$qfFilds->iscart) {
             return '';
         }
+        $project->calculated = $qfFilds->calculated && $project->calculatorparams->calculatortype;
 
         $sum = qfCalculator::getCalculator($project, $data);
         $cart = $this->session->get('qfcartbox');
@@ -308,6 +310,7 @@ class qfCart
         $html = '';
 
         if (!$cart) {
+            $cart = array();
             $html .=  '<span class="qf_minicart_empty">'.JText::_('QF_EMPTY_CART').'</span>';
         } else {
             $pcs = '<span class="qf_cart_pcs">'.$this->mlangLabel($this->qf_params->get('pcs')).'</span>';
@@ -337,7 +340,7 @@ class qfCart
                 break;
             } else {
                 $sum = $row['sum'][0][0];
-                $currency = $row['sum'][0][1][1];
+                $currency = $row['sum'][0][1]->unit;
 
                 if (!isset($arr[$currency])) {
                     $arr[$currency] = $sum*$row['qt'];
@@ -352,7 +355,7 @@ class qfCart
         }
 
         if (!$flag) {
-            $insert = number_format($arr[$currency], $row['sum'][0][1][3], ',', ' ') . ' ' . $currency;
+            $insert = number_format($arr[$currency], $row['sum'][0][1]->fixed, ',', ' ') . ' ' . $currency;
         } else {
             $insert = sizeof($cart);
         }
@@ -426,9 +429,9 @@ class qfCart
 
             foreach ($row['sum'] as $sum) {
                 if ($sumsize > 1) {
-                    $html .= $sum[1][0].' ';
+                    $html .= $sum[1]->label.' ';
                 }
-                $html .= number_format($sum[0], $sum[1][3], ',', ' ') . ' ' . $sum[1][1].'<br>';
+                $html .= number_format($sum[0], $sum[1]->fixed, ',', ' ') . ' ' . $sum[1]->unit.'<br>';
             }
             $html .= '</td>';
 
@@ -440,8 +443,8 @@ class qfCart
 
             if ($sumsize == 1) {
                 $sum = $row['sum'][0][0];
-                $currency = $row['sum'][0][1][1];
-                $html .= number_format($row['qt']*$sum, $row['sum'][0][1][3], ',', ' ') . ' ' . $currency;
+                $currency = $row['sum'][0][1]->unit;
+                $html .= number_format($row['qt']*$sum, $row['sum'][0][1]->fixed, ',', ' ') . ' ' . $currency;
                 if (!isset($rowssum[$currency])) {
                     $rowssum[$currency] = $row['qt']*$sum;
                 } else {
@@ -477,7 +480,7 @@ class qfCart
     {
         $html = '<div class="qf_cart_btn">';
         if ($id = $this->qf_params->get('contacts')) {
-            $html .= '<input name="qfcartnext2" type="button" class="btn qfcartsubmit" value="' . JText::_($this->qf_params->get('text_3')) . '" onclick="jQuery.QFcart.cartnext()" />';
+            $html .= '<input name="qfcartnext2" type="button" class="btn qfcartsubmit" value="' . JText::_($this->qf_params->get('text_3')) . '" onclick="QFcart.cartnext()" />';
         } else {
             $html .= $this->boxSubmitS();
         }
@@ -488,7 +491,7 @@ class qfCart
     protected function boxSubmitS()
     {
         $html = '';
-        $html .= '<form method="post" action="/index.php?tmpl=component" class="cart_form"><input name="task" type="hidden" value="qfcartsubmit"><input name="root" type="hidden" value="'.JURI::current().'"><input name="option" type="hidden" value="com_qf3">' . JHtml::_('form.token') . '<input name="qfcartsubmit" type="button" class="btn qfcartsubmit" value="' . JText::_($this->qf_params->get('text_4')) . '" onclick="this.form.cartsubmit()" /></form>';
+        $html .= '<form method="post" class="cart_form"><input name="task" type="hidden" value="qfcartsubmit"><input name="root" type="hidden" value="'.JURI::current().'"><input name="option" type="hidden" value="com_qf3">' . JHtml::_('form.token') . '<input name="qfcartsubmit" type="button" class="btn qfcartsubmit" value="' . JText::_($this->qf_params->get('text_4')) . '" onclick="this.form.cartsubmit()" /></form>';
         return $html;
     }
 
@@ -588,8 +591,12 @@ class qfCart
                     foreach ($fild->data as $row) {
                         $html .= $this->getCartRow($row);
                     }
-                } elseif ($fild->teg == 'calcCondition') {
-                    $html .= $this->getCartRow($fild->data, false);
+                } elseif ($fild->teg == 'qftabs') {
+                    $options = $fild->options;
+                    for ($n = 0; $n < sizeof($options); $n ++) {
+                        // $html .= $this->mlangLabel($options[$n]->label) . '<br>';
+                        $html .= $this->getCartRow($fild->data[$n]);
+                    }
                 } elseif ($fild->teg == 'customHtml') {
                     $html .= $this->mlangLabel($fild->label) . '<br>';
                 } elseif ($fild->teg == 'customPhp') {
@@ -598,14 +605,14 @@ class qfCart
                         $html .= $this->mlangLabel($fild->label);
                     }
                     $html .= $this->mlangLabel($fild->value) . '</li>';
+                } elseif (isset($fild->hideone) && $fild->hideone) {
+                    if (isset($fild->data) && ! empty($fild->data)) {
+                        $html .= $this->getCartRow($fild->data);
+                    }
                 } else {
                     $html .= '<li>';
                     $html .= $this->mlangLabel($this->letLable($fild)) . ' : ';
-                    if ($fild->teg == 'input[checkbox]') {
-                        $html .= $fild->value ? (JText::_('JYES')) : (JText::_('JNO'));
-                    } else {
-                        $html .= $this->mlangLabel($fild->value);
-                    }
+                    $html .= $this->mlangLabel($fild->value);
                     $html .= '</li>';
                     if (isset($fild->data) && ! empty($fild->data)) {
                         $html .= $this->getCartRow($fild->data);

@@ -1,7 +1,7 @@
 <?php
 /**
 * @package		Joomla
-* @Copyright ((c) bigemot.ru
+* @Copyright ((c) plasma-web.ru
 * @license    GNU/GPL
 */
 defined('JPATH_PLATFORM') or die;
@@ -16,10 +16,10 @@ class JFormFieldDonation extends JFormField
 
         $lang = JFactory::getLanguage()->getTag();
         if($lang == 'ru-RU'){
-          $link = '<a href="http://plasma-web.ru/dev/quickform" target="_blank" id="qflinck">';
+          $link = '<a href="http://plasma-web.ru/dev/quickform3" target="_blank" id="qflinck">';
         }
         else{
-          $link = '<a href="http://plasma-web.ru/en/dev/quickform" target="_blank" id="qflinck">';
+          $link = '<a href="http://plasma-web.ru/en/dev/quickform3" target="_blank" id="qflinck">';
         }
 
         return $donation_code.$link.JText::_('QF_ENTER_CODE').' plasma-web.ru</a>';

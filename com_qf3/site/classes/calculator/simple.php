@@ -11,25 +11,20 @@ class qfCalculator_tmpl extends qfCalculator
 {
     public function getTmpl($project, $data)
     {
-        $formuls = array();
+        $this->formuls = array();
         $sumarr = array();
 
         $original = explode(';', str_replace(' ', '', $project->calculatorparams->calcformula));
         foreach ($original as $formul) {
-            $pats = explode('=', trim($formul));
-            $formuls[$pats[0]] = $pats[1];
+            $pats = preg_split('/^([^=]+)=/', trim($formul),-1,PREG_SPLIT_DELIM_CAPTURE);
+            $this->formuls[$pats[1]] = $pats[2];
         }
 
         $arr = $this->CalcArray($data);
         $i = 0;
 
         foreach ($arr[1] as $k => $v) {
-            $str = preg_replace_callback('/{(.*?)}/', function ($m) use ($arr) {
-                $rep = isset($arr[0][$m[1]])?$arr[0][$m[1]]:'';
-                return str_replace('{'.$m[1].'}', $rep, $m[0]);
-            }, $formuls[$k]);
-
-            $str = $this->checkStr($str);
+            $str = $this->checkStr($this->converter($k, $arr));
 
             try {
                 $sum = eval('$res=('. $str .');return $res;');
@@ -41,7 +36,7 @@ class qfCalculator_tmpl extends qfCalculator
                 parent::qfErrormes('calculator error: '.$str);
             }
 
-            $sum = round($sum, (int)$v[3]);
+            $sum = round($sum, (int) $v->fixed);
 
             if (!isset($_POST ['qfprice'][$i])) {
                 parent::qfErrormes(JText::_('COM_QF_EMAIL_ERROR_CALCULATOR'));
@@ -52,8 +47,6 @@ class qfCalculator_tmpl extends qfCalculator
                 }
             }
 
-            // $sum = number_format($sum, (int)$v[3], ',', ' ');
-
             $sumarr [$i] = array($sum, $v);
             $i++;
         }
@@ -61,6 +54,17 @@ class qfCalculator_tmpl extends qfCalculator
         return $sumarr;
     }
 
+    protected function converter($fildid, $arr)
+    {
+        $str = '';
+        if(isset($this->formuls[$fildid])){
+            $str = preg_replace_callback('/{(.*?)}/', function ($m) use ($arr) {
+                $rep = isset($arr[0][$m[1]])?$arr[0][$m[1]]:'('.$this->converter($m[1], $arr).')';
+                return str_replace('{'.$m[1].'}', $rep, $m[0]);
+            }, $this->formuls[$fildid]);
+        }
+        return str_replace('()','',$str);
+    }
 
     protected function CalcArray($data)
     {
@@ -75,12 +79,7 @@ class qfCalculator_tmpl extends qfCalculator
                     $setsarray = array_merge($setsarray, $arr[1]);
                 }
             } elseif ($fild->teg == 'calculatorSum') {
-                $setsarray[$fild->fildid] = array(
-                        $fild->label,
-                        $fild->unit,
-                        $fild->pos,
-                        $fild->fixed
-                );
+                $setsarray[$fild->fildid] = $fild;
             } else {
                 if (isset($fild->math) && $fild->math !== '') {
                   if(str_replace(array('text','number','range','hidden'), '', $fild->teg) != $fild->teg){

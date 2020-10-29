@@ -35,7 +35,6 @@ class qfCalculator_tmpl extends qfCalculator
         foreach ($calculatorSum as $k => $v) {
             foreach ($arr as $kk => $vv) {
                 if ($k == $kk) {
-                    // $sum = number_format($v, (int)$vv[3], ',', ' ');
                     $sumarr[] = array($v, $vv);
                 }
             }
@@ -49,23 +48,17 @@ class qfCalculator_tmpl extends qfCalculator
     {
         $setsarray = array();
 
-        foreach ($data as $fild) {
-            if ($fild->teg == 'cloner' || $fild->teg == 'qftabs') {
-                foreach ($fild->data as $row) {
+        foreach ($data as $field) {
+            if ($field->teg == 'cloner' || $field->teg == 'qftabs') {
+                foreach ($field->data as $row) {
                     $arr = $this->CalcArray($row);
                     $setsarray = array_merge($setsarray, $arr);
                 }
-            } elseif ($fild->teg == 'calculatorSum') {
-                $setsarray[$fild->fildid] = array(
-                        $fild->label,
-                        $fild->unit,
-                        $fild->pos,
-                        $fild->fixed,
-                        $fild->fildid
-                );
+            } elseif ($field->teg == 'calculatorSum') {
+                $setsarray[$field->fildid] = $field;
             } else {
-                if (isset($fild->data) && ! empty($fild->data)) {
-                    $arr = $this->CalcArray($fild->data);
+                if (isset($field->data) && ! empty($field->data)) {
+                    $arr = $this->CalcArray($field->data);
                     $setsarray = array_merge($setsarray, $arr);
                 }
             }

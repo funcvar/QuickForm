@@ -21,6 +21,12 @@ class Qf3Helper
 			'index.php?option=com_qf3&view=statistics',
 			$vName == 'statistics'
 		);
+
+		JHtmlSidebar::addEntry(
+			JText::_('QF_GLOBAL_SETTINGS_A'),
+			'index.php?option=com_config&view=component&component=com_qf3',
+			$vName == 'component'
+		);
 	}
 
 	public static function getStateOptions()

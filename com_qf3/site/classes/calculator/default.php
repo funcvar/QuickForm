@@ -26,7 +26,7 @@ class qfCalculator_tmpl extends qfCalculator
             parent::qfErrormes('calculator error: '.$str);
         }
 
-        $sum = round($sum, $this->sumdata[3]);
+        $sum = round($sum, $this->sumdata->fixed);
 
         if (!isset($_POST ['qfprice'][0])) {
             parent::qfErrormes(JText::_('COM_QF_EMAIL_ERROR_CALCULATOR'));
@@ -37,7 +37,6 @@ class qfCalculator_tmpl extends qfCalculator
             }
         }
 
-        // $sum = number_format($sum, $this->sumdata[3], ',', ' ');
         $sumarr[0] = array($sum, $this->sumdata);
 
         return $sumarr;
@@ -87,12 +86,7 @@ class qfCalculator_tmpl extends qfCalculator
                     $str .= $boxstr;
                 }
             } elseif ($fild->teg == 'calculatorSum') {
-                $this->sumdata = array(
-                        $fild->label,
-                        $fild->unit,
-                        $fild->pos,
-                        $fild->fixed
-                );
+                $this->sumdata = $fild;
             } else {
                 if (isset($fild->math) && $fild->math !== '') {
                     $str .= str_replace('v', $fild->value, $fild->math);
