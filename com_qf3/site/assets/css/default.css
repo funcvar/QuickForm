@@ -27,13 +27,15 @@
   line-height: 1.2em;
   text-align: right;
   width: 38%;
+  box-sizing: border-box;
 }
 
 .qf3form.default .qf3txt input,
 .qf3form.default select {
   box-sizing: border-box;
+  display: inline-block;
   width: 38%;
-  max-width: 38%;
+  /* max-width: 38%; */
   height: 2.4em;
   background: #fff;
   padding: 2px 0 2px 7px;
@@ -62,6 +64,12 @@
   width: 62%;
   margin-left: -31%;
   z-index: 9999;
+}
+
+.qfmodalform.compact {
+  left: 0;
+  width: 100%;
+  margin-left: 0;
 }
 
 .qfmodalform div.qf3form {
@@ -139,6 +147,7 @@
   width: 50%;
   vertical-align: top;
   padding: 2px 0 2px 7px;
+  display: inline-block;
 }
 
 /* checkbox */
@@ -149,8 +158,12 @@
 }
 
 .qf3form.default .chbxlabel {
-  display: inline-flex;
+  display: inline-block;
   line-height: 1.2em;
+}
+.qf3form.default .qfchkbx {
+    display: inline-block;
+    width: 62%;
 }
 
 /* hidden */
@@ -296,6 +309,7 @@
 .qf3form.default .qfcloner.horizontally table th {
   vertical-align: top;
   padding: 3px;
+  text-align: center;
 }
 
 .qf3form.default td.qfadd,
@@ -364,14 +378,14 @@
 }
 
 /* qf_number */
-.qf3form.default .qfstepper_inner {
+.qf3form.default .qf_number_inner {
   display: inline-block;
   max-width: 120px;
   width: 100%;
   position: relative;
 }
 
-.qf3form.default .qfstepper input[type="number"] {
+.qf3form.default .qf_number input[type="number"] {
   width: 100%;
   height: 2.4em;
   padding: .375rem .75rem;
@@ -380,11 +394,11 @@
   -moz-appearance: textfield;
 }
 
-.qf3form.default .qfstepper input[type="number"]:focus {
+.qf3form.default .qf_number input[type="number"]:focus {
   outline: 0;
 }
 
-.qf3form.default .qfstepper button {
+.qf3form.default .qf_number button {
   display: flex;
   align-content: center;
   justify-content: center;
@@ -394,26 +408,26 @@
   background: #fff;
   height: 50%;
   font-size: 1.1em;
-  line-height: 0;
+  /* line-height: 0; */
   transition: all ease 0.25s;
 }
 
-.qf3form.default .qfstepper button:hover {
+.qf3form.default .qf_number button:hover {
   background-color: #f3f3f3;
 }
 
-.qf3form.default .qfstepper input::-webkit-inner-spin-button,
-.qf3form.default .qfstepper input::-webkit-outer-spin-button {
+.qf3form.default .qf_number input::-webkit-inner-spin-button,
+.qf3form.default .qf_number input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
 }
 
-.qf3form.default .qfstepper.vertically input {
+.qf3form.default .qf_number.vertically input {
   padding-right: 3.25rem;
 }
 
-.qf3form.default .qfstepper.vertically .stepper__controls {
+.qf3form.default .qf_number.vertically .number__controls {
   position: absolute;
   right: 0;
   top: 0;
@@ -424,17 +438,17 @@
   z-index: 1;
 }
 
-.qf3form.default .qfstepper.vertically .qfup {
+.qf3form.default .qf_number.vertically .qfup {
   margin-bottom: -1px;
 }
 
-.qf3form.default .qfstepper.horizontally input {
+.qf3form.default .qf_number.horizontally input {
   padding-left: 2.25rem;
   padding-right: 2.25rem;
   text-align: center;
 }
 
-.qf3form.default .qfstepper.horizontally button {
+.qf3form.default .qf_number.horizontally button {
   position: absolute;
   height: 100%;
   top: 0;
@@ -443,12 +457,12 @@
   z-index: 1;
 }
 
-.qf3form.default .qfstepper.horizontally .qfup {
+.qf3form.default .qf_number.horizontally .qfup {
   right: 0;
   margin-left: -1px;
 }
 
-.qf3form.default .qfstepper.horizontally .qfdown {
+.qf3form.default .qf_number.horizontally .qfdown {
   left: 0;
   margin-right: -1px;
 }
@@ -587,7 +601,7 @@
 
 .qf3form.default .qf_checkbox .chbxlabel {
   position: relative;
-  padding: 0.5em 0 0 5em;
+  padding: 0 0 0 4.5em;
   cursor: pointer;
 }
 
@@ -627,25 +641,127 @@
   left: 2em;
 }
 
+/* calendar */
+.qf3form.default .double {
+  display: inline-block;
+  width: 62%;
+}
+.qf3form.default .single {
+  display: inline-block;
+  width: 38%;
+}
+
+.qf3form.default .qfcalendar input {
+  width: 100%;
+}
+.qf3form.default .double_inner,
+.qf3form.default .qf_date_inner {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.qf3form.default .double .qf_date {
+  width: 48%;
+}
+.qf3form.default .qf_calen{
+  position: relative;
+  z-index: 9999;
+}
+.qf3form.default .widgetCalendar {
+	position: absolute;
+	left: 0;
+	height: 0px;
+	overflow: hidden;
+	width: 100%;
+  min-width: 180px;
+}
+.qf3form.default .qf_date_a{
+  display: block;
+  padding: 0 1.2em;
+  background: #d3fffa;
+  border: 2px solid #cfcfcf;
+  background-image: url(../datepicker/images/calendar.png);
+  background-size: 100% 100%;
+}
+.qf3form.default div.datepicker {
+	height: 200px;
+}
+
+.qf3form.default .datepickerContainer,
+.qf3form.default .datepickerContainer table {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* stepper */
+.qf3form.default .qfstepper {
+    position: relative;
+    border: 1px solid;
+}
+.qf3form.default .qfstepperinner {
+    padding: 1em 1em 2em;
+}
+.qf3form.default .qfstepper .qfprev,
+.qf3form.default .qfstepper .qfnext {
+    position:absolute;
+    padding: 0 1em;
+    border: 1px solid;
+    bottom: 1em;
+    cursor: pointer;
+    opacity: 0.4;
+}
+.qf3form.default .qfstepper .qfprev {
+    left: 1em;
+}
+.qf3form.default .qfstepper .qfnext {
+    right: 1em;
+}
+
+
+
+/* example 1 */
+.qf3form.default .ex3inline {
+    margin-left: 38%;
+}
+.qf3form.default.compact .ex3inline {
+  margin-left: 0;
+}
+.qf3form.default .ex3inline .qf3label {
+  display: block;
+  text-align: left;
+}
+.qf3form.default .ex3inline select{
+  width: 100%;
+  max-width: 100%;
+}
+.qf3form.default .ex3inline .qfselect{
+  width: 30%;
+  margin-left: 0;
+}
+
+
+
+
 /* compact */
-.qf3form.default .compact .qf3label {
+.qf3form.default.compact .qf3label {
   width: 100%;
   text-align: left;
 }
 
-.qf3form.default .compact .qfcalculatorsum .qf3label,
-.qf3form.default .compact .chbxlabel {
+.qf3form.default.compact .qfcalculatorsum .qf3label {
   display: inline;
 }
 
-.qf3form.default .compact .qf3txt input,
-.qf3form.default .compact .qfsubmit input,
-.qf3form.default .compact textarea,
-.qf3form.default .compact .qfslider_inner,
-.qf3form.default .compact select {
+.qf3form.default.compact .qf3txt input,
+.qf3form.default.compact .qfsubmit input,
+.qf3form.default.compact textarea,
+.qf3form.default.compact .qfchkbx,
+.qf3form.default.compact .qfslider_inner,
+.qf3form.default.compact .double,
+.qf3form.default.compact .single,
+.qf3form.default.compact select {
   width: 100%;
   max-width: 100%;
-}
-.qf3form.default .compact .qf_checkbox .qf3label {
-  margin-bottom: 1em;
 }

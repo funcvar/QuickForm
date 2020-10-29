@@ -14,6 +14,8 @@ class QuickForm3
         $this->lang->load('com_qf3');
         $this->db = JFactory::getDBO();
         $this->user = JFactory::getUser();
+        $xml = JFactory::getXML(JPATH_ADMINISTRATOR .'/components/com_qf3/qf3.xml');
+        $this->version = preg_replace("/[^0-9]/", '', (string)$xml->version);
     }
 
     public function getQuickForm($id)
@@ -26,19 +28,30 @@ class QuickForm3
         $project = $this->getProjectById($id);
 
         if (! empty($project)) {
+            if($project->formparams->cssform != -1) {
+                $formclass = ' '.str_replace(array('.css','-1'), '', $project->formparams->cssform);
+            }else{
+                $formclass = '';
+            }
+
             if ($project->published && in_array($project->access, $groups)) {
                 if ($project->language == $this->lang->getTag() || $project->language == '*') {
                     if (!$ajaxquery) {
-                        JHtml::_('jquery.ui');
+                        JHtml::_('jquery.framework');
 
-                        if ($project->formparams->cssform != 'none') {
-                            JHtml::_('stylesheet', 'components/com_qf3/assets/css/' . $project->formparams->cssform, array('version' => 'auto'));
+                        if ($project->formparams->cssform != -1) {
+                            JHtml::_('stylesheet', 'components/com_qf3/assets/css/' . $project->formparams->cssform, array('version' => $this->version));
                         }
 
-                        JHtml::_('script', 'components/com_qf3/assets/js/' . $project->formparams->jsform, array('version' => 'auto'));
+                        JHtml::_('script', 'components/com_qf3/assets/js/' . $project->formparams->jsform, array('version' => $this->version));
+
+                        if ($this->get('loadcalendar', $project->formparams)) {
+                            JHtml::_('stylesheet', 'components/com_qf3/assets/datepicker/css/datepicker.css', array('version' => $this->version));
+                            JHtml::_('script', 'components/com_qf3/assets/datepicker/js/datepicker.js', array('version' => $this->version));
+                        }
 
                         if ($project->formparams->modal) {
-                            $html .= '<a href="javascript:void(0);" class="qf3modal" data-project="'.$project->id.'">'.$this->mlangLabel($project->formparams->modallink).'</a>';
+                            $html .= '<a href="javascript:void(0);" class="qf3modal" data-project="'.$project->id.'" data-url="'.JURI::current().'" data-class="'.trim($formclass).'">'.$this->mlangLabel($project->formparams->modallink).'</a>';
 
                             return $html;
                         }
@@ -58,7 +71,6 @@ class QuickForm3
 
         if ($html) {
             $rethtml = '';
-            $formclass = ' '.str_replace('.css', '', $project->formparams->cssform);
 
             $rethtml .=  '<div class="qf3form'.$formclass.'"><form method="post" enctype="multipart/form-data" autocomplete="'.$project->formparams->autocomplete.'">' . $html . '<input name="option" type="hidden" value="com_qf3" /><input name="id" type="hidden" value="' . $id . '" />' . JHtml::_('form.token');
 
@@ -68,7 +80,7 @@ class QuickForm3
                 $rethtml .= '<input name="calculatortype" type="hidden" value="' . $type . '" />';
                 if ($type != 'default' && $type != 'custom') {
                     $formula=preg_replace('/\s*\t*/', '', $project->calculatorparams->calcformula);
-                    $rethtml .= '<input name="calcformula" type="hidden" value="' . $formula . '" />';
+                    $rethtml .= '<input name="calcformula" type="hidden" data-formula="' . $formula . '" />';
                 }
             }
 
@@ -184,11 +196,20 @@ class QuickForm3
                 $html .= $this->qTabs($field, $id);
               break;
               case 'qf_number':
-                  $html .= $this->qQfstepper($field, $id);
-                  break;
+                $html .= $this->qQfnumber($field, $id);
+              break;
               case 'qf_range':
-                  $html .= $this->qQfslider($field, $id);
-                  break;
+                $html .= $this->qQfslider($field, $id);
+              break;
+              case 'qfcalendar':
+                $html .= $this->qQfcalendar($field, $id);
+              break;
+              case 'stepperbox':
+                $html .= $this->qStepper($field, $id);
+              break;
+              case 'stepperbtns':
+                $html .= $this->qStepperbtns($field, $id);
+              break;
               default:
                 $html .= $this->qInput($field, $id);
           }
@@ -350,6 +371,51 @@ class QuickForm3
         return $html;
     }
 
+    protected function qStepper($field, $id) {
+        $class = $this->get('class', $field) ? ' ' . $field->class : '';
+        $related = $this->get('related', $field) ? (int) $field->related : 0;
+
+        if (! $related) {
+            return 'qStepper: Field group id not specified.';
+        }
+        if ($related == $id) {
+            return 'recursion error';
+        }
+
+        $data = $this->getDataById($related);
+        if (empty($data)) {
+            return '';
+        }
+
+        $html = '';
+
+        if ($field->label) {
+            $html .= '<div class="qfstepperlabel">' . $this->mlangLabel($field->label) . '</div>';
+        }
+        $html .= '<div class="qfstepper' . $class . '">';
+        $html .= '<div class="qfstepperinner">';
+        $html .= $this->getFields($data);
+        $html .= '</div>';
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    protected function qStepperbtns($field, $id) {
+        $class = $this->get('class', $field) ? ' ' . $field->class : '';
+        $related = $this->get('related', $field) ? (int) $field->related : 0;
+        $prev = $this->get('prev', $field);
+        $next = $this->get('next', $field);
+
+        $html = '';
+        $html .= '<div class="qfstepperbtns' . $class . '">';
+        $html .= '<div class="qfprev">'.$prev.'</div><div class="qfnext" data-next="'.$related.'">'.$next.'<input name="qfstepper[]" type="hidden" value="0" /></div>';
+        $html .= '</div>';
+
+        return $html;
+    }
+
+
     protected function qTabs($field, $id)
     {
         $class = $this->get('class', $field) ? ' ' . $field->class : '';
@@ -399,7 +465,7 @@ class QuickForm3
         return $html;
     }
 
-    protected function qQfstepper($field, $id)
+    protected function qQfnumber($field, $id)
     {
         $class = $this->get('class', $field) ? ' class="' . $field->class . '"' : '';
         $required = $this->get('required', $field) ? ' required' : '';
@@ -418,9 +484,9 @@ class QuickForm3
         }
 
         $html = '';
-        $html .= '<div class="qf3 qfstepper' . $orient. ($required ? ' req' : '') . $this->boxClass($field) . '">';
+        $html .= '<div class="qf3 qf_number' . $orient. ($required ? ' req' : '') . $this->boxClass($field) . '">';
         $html .= $this->getLabel($field);
-        $html .= '<div class="qfstepper_inner">';
+        $html .= '<div class="qf_number_inner">';
 
         $html .= '<input type="number" name="qfnumber[]" value="'.$value.'"' . $class . $custom . $required . $placeholder;
         if ($math !== '') {
@@ -428,7 +494,7 @@ class QuickForm3
         }
         $html .= ' />';
 
-        $html .= '<div class="stepper__controls"><button type="button" class="qfup">+</button><button type="button" class="qfdown">−</button></div>';
+        $html .= '<div class="number__controls"><button type="button" class="qfup">+</button><button type="button" class="qfdown">−</button></div>';
         $html .= '</div>';
         $html .= '</div>';
 
@@ -474,6 +540,83 @@ class QuickForm3
 
         return $html;
     }
+
+    protected function qQfcalendar($field, $id)
+    {
+      $double = $this->get('double', $field);
+      $format = $this->get('format', $field) ? $field->format : 'Y-m-d';
+      $math = $this->get('math', $field);
+
+      JHtml::_('stylesheet', 'components/com_qf3/assets/datepicker/css/datepicker.css', array('version' => $this->version));
+      JHtml::_('script', 'components/com_qf3/assets/datepicker/js/datepicker.js', array('version' => $this->version));
+
+      $html = '';
+      $html .= '<div class="qf3 qfcalendar qf3txt' . ($this->get('required', $field) ? ' req' : '') . $this->boxClass($field) . '">';
+      $html .= $this->getLabel($field);
+
+      if($double) {
+
+          if($val1 = $this->get('val1', $field)){
+              $rest = (int) substr($val1, 1);
+              if($val1{0}=='+')$val1 = date($format, (time()+3600*24*$rest));
+              elseif($val1{0}=='-')$val1 = date($format, (time()-3600*24*$rest));
+          }
+          else $val1 = date($format);
+
+          if($val2 = $this->get('val2', $field)){
+              $rest = (int) substr($val2, 1);
+              if($val2{0}=='+')$val2 = date($format, (time()+3600*24*$rest));
+              elseif($val2{0}=='-')$val2 = date($format, (time()-3600*24*$rest));
+          }
+          else $val2 = date($format);
+
+        $html .= '<div class="double">';
+          $html .= '<div class="double_inner">';
+            $html .= '<div class="qf_date">';
+              $field->value = $val1;
+              $html .= '<div class="qf_date_label">'.$this->get('leb1', $field).'</div>';
+              $html .= '<div class="qf_date_inner"><input type="text" name="qfcalendar[]"' . $this->attr(array('class', 'custom', 'placeholder', 'required', 'value'), $field) . ' /><a href="#" class="qf_date_a"></a></div>';
+              $html .= '<div class="qf_calen"><div class="widgetCalendar"></div></div>';
+            $html .= '</div>';
+            $html .= '<div class="qf_date">';
+              $field->value = $val2;
+              $html .= '<div class="qf_date_label">'.$this->get('leb2', $field).'</div>';
+              $html .= '<div class="qf_date_inner"><input type="text" name="qfcalendar[]"' . $this->attr(array('class', 'custom', 'placeholder', 'required', 'value'), $field) . ' /><a href="#" class="qf_date_a"></a></div>';
+              $html .= '<div class="qf_calen"><div class="widgetCalendar"></div></div>';
+            $html .= '</div>';
+          $html .= '</div>';
+        $html .= '</div>';
+      }
+      else {
+          if($field->value = $this->get('value', $field)){
+              $rest = (int) substr($field->value, 1);
+              if($field->value[0]=='+')$field->value = date($format, (time()+3600*24*$rest));
+              elseif($field->value[0]=='-')$field->value = date($format, (time()-3600*24*$rest));
+          }
+          else $field->value = date($format);
+
+        $html .= '<div class="single">';
+          $html .= '<div class="single_inner">';
+            $html .= '<div class="qf_date">';
+              $html .= '<div class="qf_date_inner"><input type="text" name="qfcalendar[]"' . $this->attr(array('class', 'custom', 'placeholder', 'required', 'value'), $field) . ' /><a href="#" class="qf_date_a"></a></div>';
+              $html .= '<div class="qf_calen"><div class="widgetCalendar"></div></div>';
+            $html .= '</div>';
+          $html .= '</div>';
+        $html .= '</div>';
+      }
+
+      $params[] = '"format":"' . $format . '"';
+      $params[] = '"fildid":"' . $id . '.' . $field->fildnum . '"';
+      if($math) $params[] = '"math":"' . $math . '"';
+
+      $html .= '<input class="calendar_inp" type="hidden" data-settings="' . htmlentities('{'.implode($params, ',').'}') . '" />';
+
+      $html .= '</div>';
+
+      return $html;
+
+    }
+
 
     protected function qRadio($field, $id)
     {
@@ -562,7 +705,7 @@ class QuickForm3
             $html .= $this->getLabel($field, $rand, 'qf3label qfbefore');
         }
 
-        $html .= '<input id="' . $rand . '" type="checkbox" name="chbx"' . $this->attr(array('class', 'custom', 'checked', 'required'), $field);
+        $html .= '<div class="qfchkbx"><input id="' . $rand . '" type="checkbox" name="chbx"' . $this->attr(array('class', 'custom', 'checked', 'required'), $field);
 
         if ($related || $math !== '') {
             if ($related) {
@@ -584,7 +727,7 @@ class QuickForm3
         }
 
         $html .= '<input name="qfcheckbox[]" type="hidden" value="0" />';
-        $html .= '</div>';
+        $html .= '</div></div>';
 
         return $html;
     }
@@ -647,7 +790,7 @@ class QuickForm3
         ), '', $field->teg);
 
         $field->fildid = $id . '.' . $field->fildnum;
-        $qf3txt = $type=='button'?'qf3btn':'qf3txt';
+        $qf3txt = ($type=='button'||$type=='reset')?'qf3btn':'qf3txt';
 
         $html = '';
         $html .= '<div class="qf3 '.$qf3txt.' qf' . $type . ($this->get('required', $field) ? ' req' : '') . $this->boxClass($field) . '">';
@@ -678,15 +821,24 @@ class QuickForm3
 
     protected function qSubmit($field, $id)
     {
+        $ycounter = $this->get('ycounter', $field);
+        $custom = $this->get('custom', $field) ? $field->custom : '';
+        $onclick = ' onclick="this.form.submit(this)"';
+        if(strpos($custom, 'onclick') !== false) $onclick = '';
+
         if (!isset($field->value)) {
             $field->value = 'QF_SUBMIT';
         }
 
         $html = '';
-        $html .= '<div class="qf3 qfsubmit' . $this->boxClass($field) . '">';
+        $html .= '<div class="qf3 qf3btn qfsubmit' . $this->boxClass($field) . '">';
         $html .= $this->getLabel($field);
 
-        $html .= '<input name="qfsubmit" type="button"' . $this->attr(array('class', 'custom', 'value'), $field) . ' onclick="this.form.submit()" />';
+        $html .= '<input name="qfsubmit" type="button"' . $this->attr(array('class', 'custom', 'value'), $field) . $onclick;
+        if ($ycounter !== '') {
+            $html .= ' data-submit="' . htmlentities('{"ycounter":"' . $ycounter . '"}') . '"';
+        }
+        $html .= ' />';
 
         $html .= '</div>';
 
@@ -711,7 +863,8 @@ class QuickForm3
         $unit = $this->get('unit', $field) ? $this->mlangLabel($field->unit) : '';
         $field->fildid = $id . '.' . $field->fildnum;
         $fixed = $this->get('fixed', $field) ? $field->fixed : 0;
-        $datasettings = 'data-settings="' . htmlentities('{"fixed":"' . $fixed . '","fildid":"' . $field->fildid . '"}') . '"';
+        $format = $this->get('format', $field) ? $field->format : 0;
+        $datasettings = 'data-settings="' . htmlentities('{"format":"' . $format . '","fixed":"' . $fixed . '","fildid":"' . $field->fildid . '"}') . '"';
 
         $html .= '<div class="qf3 qfcalculatorsum' . $this->boxClass($field) . '">';
         $html .= $this->getLabel($field);
@@ -928,7 +1081,7 @@ class QuickForm3
 
     protected function qAddToCart($field, $id)
     {
-        JHtml::_('script', 'modules/mod_qf3/js/qf_cart.js', array('version' => 'auto'));
+        JHtml::_('script', 'modules/mod_qf3/js/qf_cart.js', array('version' => $this->version));
 
         if (!isset($field->value)) {
             $field->value = 'QF_ADDTOCART';
@@ -949,13 +1102,16 @@ class QuickForm3
     {
         $params = JComponentHelper::getParams('com_qf3');
         $cl = '';
+        $lang = '';
         if ($params->get('display') == '2' && trim($params->get('cod'))) {
             return '<input name="qfcod" type="hidden" value="' . trim($params->get('cod')) . '" />';
         } elseif ($params->get('display') == '1') {
             $cl = ' nfl';
         }
 
-        return '<input name="qfcod" type="hidden" value="" /><div class="qfcapt' . $cl . '"><a href="http://plasma-web.ru" target="_blank">QuickForm</a></div>';
+        if($this->lang->getTag()!='ru-RU') $lang = '/en';
+
+        return '<input name="qfcod" type="hidden" value="" /><div class="qfcapt' . $cl . '"><a href="http://plasma-web.ru'.$lang.'/dev/quickform3" target="_blank">'.JText::_('QF_ACTIVATION').'</a></div>';
     }
 
     public function ajaxHTML($id)

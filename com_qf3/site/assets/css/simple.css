@@ -17,7 +17,7 @@
 
 .qf3form.simple .qf3 {
   width: 100%;
-  max-width: 280px;
+  max-width: 320px;
   margin: 0 auto;
   padding: 0 0 1.4em 0;
 }
@@ -574,4 +574,48 @@
 }
 .qf3form.simple .qf_checkbox input:checked + .chbxlabel:after {
   left: 2em;
+}
+
+/* calendar */
+.qf3form.simple .qfcalendar input {
+  width: 100%;
+}
+.qf3form.simple .double_inner,
+.qf3form.simple .qf_date_inner {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.qf3form.simple .double .qf_date {
+  width: 48%;
+}
+.qf3form.simple .qf_calen{
+  position: relative;
+  z-index: 9999;
+}
+.qf3form.simple .widgetCalendar {
+	position: absolute;
+	left: 0;
+	height: 0px;
+	overflow: hidden;
+	width: 100%;
+  min-width: 180px;
+}
+.qf3form.simple .qf_date_a{
+  display: block;
+  padding: 0 1.2em;
+  background: #d3fffa;
+  border: 2px solid #cfcfcf;
+  background-image: url(../datepicker/images/calendar.png);
+  background-size: 100% 100%;
+}
+.qf3form.simple div.datepicker {
+	height: 200px;
+}
+
+.qf3form.simple .datepickerContainer,
+.qf3form.simple .datepickerContainer table {
+  width: 100%;
+  height: 100%;
 }

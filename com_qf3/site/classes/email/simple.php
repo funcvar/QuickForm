@@ -13,12 +13,12 @@ class qfEmail_tmpl extends qfEmail
     {
       $html = '';
       if (! $project->emailparams->showtitle) {
-          $html .= '<h3>' . $this->mlangLabel($project->title) . '</h3>';
+          $html .= "\r\n" . $this->mlangLabel($project->title) . "\r\n\r\n";
       }
 
       if ($project->emailparams->showurl) {
           $link = JFactory::getApplication()->input->get('root', '', 'STRING');
-          $html .= $this->mlangLabel('QF_SOURCE') . ': <a href="' . $link . '">'.$link.'</a><br><br>';
+          $html .= $this->mlangLabel('QF_SOURCE') . ': ' . $link . "\r\n\r\n";
       }
 
       $html .= $this->getSimplRows($data);
@@ -43,23 +43,23 @@ class qfEmail_tmpl extends qfEmail
                 } elseif ($fild->teg == 'qftabs') {
                     $options = $fild->options;
                     for ($n = 0; $n < sizeof($options); $n ++) {
-                        $html .= '<br>' . $this->mlangLabel($options[$n]->label) . '<br>';
+                        $html .= "\r\n" . $this->mlangLabel($options[$n]->label) . "\r\n";
                         $html .= $this->getSimplRows($fild->data[$n]);
                     }
                 } elseif ($fild->teg == 'customHtml') {
-                    $html .= $this->mlangLabel($fild->label) . '<br>';
+                    $html .= $this->mlangLabel($fild->label) . "\r\n";
                 } elseif ($fild->teg == 'customPhp') {
                     if ($fild->label) {
-                        $html .= $this->mlangLabel($fild->label) . '<br>';
+                        $html .= $this->mlangLabel($fild->label) . "\r\n";
                     }
-                    $html .= $this->mlangLabel($fild->value) . '<br>';
+                    $html .= $this->mlangLabel($fild->value) . "\r\n";
+                } elseif (isset($fild->hideone) && $fild->hideone) {
+                    if (isset($fild->data) && ! empty($fild->data)) {
+                        $html .= $this->getSimplRows($fild->data);
+                    }
                 } else {
                     $html .= $this->mlangLabel($this->letLable($fild)) . ' : ';
-                    // if ($fild->teg == 'input[checkbox]') {
-                    //     $html .= $fild->value ? (JText::_('JYES') . '<br>') : (JText::_('JNO') . '<br>');
-                    // } else {
-                        $html .= $this->mlangLabel($fild->value) . '<br>';
-                    // }
+                        $html .= $this->mlangLabel($fild->value) . "\r\n";
                     if (isset($fild->data) && ! empty($fild->data)) {
                         $html .= $this->getSimplRows($fild->data);
                     }
@@ -73,12 +73,19 @@ class qfEmail_tmpl extends qfEmail
     {
         $html = '';
         foreach ($calculator as $arr) {
-            $sum = number_format($arr [0], (int) $arr [1] [3], ',', ' ');
-            $html .= $arr [1] [0] . ' ';
-            if ($arr [1] [2]) {
-                $html .= $sum . ' ' . $arr [1] [1] . '<br>';
+            if (!$arr[1]->format) {
+                $sum = number_format($arr[0], (int) $arr[1]->fixed, ',', ' ');
+            } elseif ($arr[1]->format == 1) {
+                $sum = number_format($arr[0], (int) $arr[1]->fixed, '.', ',');
             } else {
-                $html .= $arr [1] [1] . ' ' . $sum . '<br>';
+                $sum = number_format($arr[0], (int) $arr[1]->fixed, '.', '');
+            }
+
+            $html .= $arr[1]->label . ' ';
+            if ($arr[1]->pos) {
+                $html .= $sum . ' ' . $arr[1]->unit . "\r\n";
+            } else {
+                $html .= $arr[1]->unit . ' ' . $sum . "\r\n";
             }
         }
 

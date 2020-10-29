@@ -56,10 +56,60 @@ class Qf3ModelProject extends JModelAdmin
         return $data;
     }
 
-    protected function prepareTable($table)
+    protected function createCSSfile($data)
     {
-        $table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
+        if ($name = $data['formparams']['createcssfile']) {
+            $pats = explode('.', $name);
+            preg_match('/[a-zA-Z0-9_]+/i', $pats[0], $matches);
+
+            if ($matches[0] != $pats[0]) {
+                $this->setError('File not created. Invalid file name: '.$pats[0].'.css');
+                return false;
+            }
+
+            $name = '/components/com_qf3/assets/css/'.$matches[0].'.css';
+
+            if (file_exists(JPATH_SITE.$name)) {
+                $this->setError($name.'<br>This file already exists.');
+                return false;
+            }
+
+            if (isset($data['formparams']['copycssfile'])) {
+                if (!file_exists(JPATH_SITE.'/components/com_qf3/assets/css/default.css')) {
+                    $this->setError('The default.css file is missing.');
+                    return false;
+                }
+                $def = file_get_contents(JPATH_SITE.'/components/com_qf3/assets/css/default.css');
+                file_put_contents(JPATH_SITE.$name, str_replace('default', $matches[0], $def));
+            } else {
+                file_put_contents(JPATH_SITE.$name, "/**
+                @package
+                *Joomla & QuickForm
+                */".PHP_EOL);
+            }
+
+            return ($matches[0].'.css');
+        }
+        $this->setError('File not created. Empty file name');
+        return false;
     }
+
+    public function save($data)
+    {
+        if ($data['formparams']['csschoose'] == 'n') {
+            if (!$res = $this->createCSSfile($data)) {
+                return false;
+            }
+            $data['formparams']['cssform'] = $res;
+        }
+
+        unset($data['formparams']['csschoose']);
+        unset($data['formparams']['createcssfile']);
+        unset($data['formparams']['copycssfile']);
+
+        return parent::save($data);
+    }
+
 
     protected function canDelete($record)
     {

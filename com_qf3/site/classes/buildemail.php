@@ -13,12 +13,14 @@ require_once(JPATH_COMPONENT."/classes/email.php");
 class qfFilds
 {
     public $submited = false;
+    public $calculated = false;
     public $iscart = false;
     public $errormes = array();
     public $project = false;
     public $redirect = false;
     protected $child = array();
     public $back = false;
+    protected $stepperdata = array();
 
     public function __construct()
     {
@@ -31,6 +33,7 @@ class qfFilds
     public function getResultHtml($project)
     {
         $data = $this->getData($project->id);
+        $project->calculated = $this->calculated && $project->calculatorparams->calculatortype;
         $calculator = qfCalculator::getCalculator($project, $data);
         $html = qfEmail::getEmailHtml($project, $data, $calculator);
         return $html;
@@ -38,16 +41,19 @@ class qfFilds
 
     public function sumCustomAjax()
     {
-      $strarr = array();
-      $id = $this->app->input->get('id', 0, 'int');
-      $project = $this->getProjectById($id);
-      if(!$project) return '';
-      $data = $this->getData($project->id);
-      $sumarr = qfCalculator::getCalculator($project, $data);
-      foreach($sumarr as $arr){
-        $strarr[] = $arr[1][4] . ':' . $arr[0];
-      }
-      return implode(';', $strarr);
+        $strarr = array();
+        $id = $this->app->input->get('id', 0, 'int');
+        $project = $this->getProjectById($id);
+        if (!$project) {
+            return '';
+        }
+        $data = $this->getData($project->id);
+        $project->calculated = $this->calculated && $project->calculatorparams->calculatortype;
+        $sumarr = qfCalculator::getCalculator($project, $data);
+        foreach ($sumarr as $arr) {
+            $strarr[] = $arr[1]->fildid . ':' . $arr[0];
+        }
+        return implode(';', $strarr);
     }
 
     public function getErrormes()
@@ -67,7 +73,7 @@ class qfFilds
     public function qfcheckToken()
     {
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-        $token = explode('/', str_replace(array('w', '.', '-', '|'), '', JURI::current()));
+        $token = explode('/', str_replace(array('w', '.', '-', '|'), '', $this->app->input->get('root', '', 'string')));
         if ($token[2] != $this->app->input->get('qftoken', '', 'string')) {
             jexit(JText::_('JINVALID TOKEN'));
         }
@@ -182,6 +188,15 @@ class qfFilds
               case 'cloner':
                   $data [] = $this->getCloner($field);
               break;
+              case 'qfcalendar':
+                  $data [] = $this->getCalendar($field);
+              break;
+              case 'stepperbox':
+                  $data [] = $this->getStepperbox($field);
+              break;
+              case 'stepperbtns':
+                  $data [] = $this->getStepperbtns($field);
+              break;
               case 'qfincluder':
                   $data [] = $this->getQfincluder($field);
               break;
@@ -237,7 +252,7 @@ class qfFilds
             if (! $val) {
                 if ($field->label) {
                     $err = $this->mlangLabel($field->label);
-                } elseif($this->get('placeholder', $field)){
+                } elseif ($this->get('placeholder', $field)) {
                     $err = $this->mlangLabel($field->placeholder);
                 } else {
                     $err = $field->teg;
@@ -321,32 +336,83 @@ class qfFilds
         return $field;
     }
 
+    protected function recursively($data, $i)
+    {
+        foreach ($data as $field) {
+            if ($field->teg == 'stepperbtns') {
+                if (isset($field->step) && ! empty($field->step)) {
+                    $dat = $this->getChildren($field->step);
+                    $this->stepperdata[$i] = array_merge($this->stepperdata[$i], $dat);
+                    $this->recursively($dat, $i);
+                }
+            } else {
+                if (isset($field->data) && ! empty($field->data)) {
+                    $this->recursively($field->data, $i);
+                }
+            }
+        }
+    }
+
+    protected function getStepperbox($field)
+    {
+        static $i = 0;
+        $this->stepperdata[$i] = array();
+        $field->hideone = true;
+        if ($id = $this->get('related', $field)) {
+            $data = $this->getChildren($id);
+            $this->recursively($data, $i);
+            $field->data = array_merge($data, $this->stepperdata[$i]);
+        }
+        $i ++;
+
+        return $field;
+    }
+
+    protected function getStepperbtns($field)
+    {
+        static $i = 0;
+
+        $val = ( int ) $this->getVal('qfstepper', $i);
+        $i ++;
+
+        $field->hideone = true;
+
+
+        if ($val && $id = $this->get('related', $field)) {
+            $field->step = $id;
+        }
+
+        return $field;
+    }
+
     protected function getCheckbox($field)
     {
         static $i = 0;
 
         $val = ( int ) $this->getVal('qfcheckbox', $i);
-        $field->value = $val;
         $this->chekRequired($field, $val);
-
+        $cbxhide = $this->get('cbxhide', $field);
 
         if (!$val) {
             $field->math = '';
 
-            if ($this->get('hidech', $field)) {
+            if ($this->get('hidech', $field) || $cbxhide == 2) {
                 $field->hide = 1;
             }
         }
 
+        if($cbxhide == 1) $field->hide = 1;
+        elseif ($cbxhide == 3) $field->hideone = 1;
+
         $i ++;
 
         if ($id = $this->get('related', $field)) {
-            if ($field->value) {
+            if ($val) {
                 $field->data = $this->getChildren($id);
             }
         }
 
-        if ($field->value) {
+        if ($val) {
             $field->value = 'QF_YES';
         } else {
             $field->value = 'QF_NO';
@@ -401,14 +467,50 @@ class qfFilds
         return $field;
     }
 
+    protected function getCalendar($field)
+    {
+        static $i = 0;
+
+        $math = $this->get('math', $field);
+        if($this->get('double', $field)) {
+          $val1 = $this->getVal('qfcalendar', $i);
+          $i ++;
+          $val2 = $this->getVal('qfcalendar', $i);
+          $val = $val1 . ' — ' . $val2;
+          if(strpos($math, 'v') !== false) {
+            $format = $this->get('format', $field, 'Y-m-d');
+            $date1 = DateTime::createFromFormat($format, $val1);
+            $date2 = DateTime::createFromFormat($format, $val2);
+            $diff = (strtotime($date2->format('Y-m-d H:i')) - strtotime($date1->format('Y-m-d H:i')))/3600/24;
+            if($diff < 0)$diff=0;
+            else $diff=ceil($diff);
+            $field->math = str_replace('v', $diff, $field->math);
+          }
+        }
+        else {
+          $val = $this->getVal('qfcalendar', $i);
+          if(strpos($math, 'v') !== false) {
+            $field->math = str_replace('v', '0', $field->math);
+          }
+        }
+
+        $field->value = strip_tags($val);
+
+
+        $this->chekRequired($field, $field->value);
+        $i ++;
+
+        return $field;
+    }
+
     protected function getCloner($field)
     {
         static $i = 0;
 
         $val = ( int ) $this->getVal('qfcloner', $i);
 
-        if(!$val){
-          $this->errormes[] = JText::_('FORM_ERROR') . '_qfcloner_empty';
+        if (!$val) {
+            $this->errormes[] = JText::_('FORM_ERROR') . '_qfcloner_empty';
         }
 
         $max = $field->max;
@@ -443,6 +545,7 @@ class qfFilds
 
     protected function getQfincluder($field)
     {
+        $field->hideone = true;
         if ($id = $this->get('related', $field)) {
             $field->data = $this->getChildren($id);
         }
@@ -458,40 +561,49 @@ class qfFilds
             $field->back = $this->getVal('qfuseremail', 0);
         }
 
-        $field->value = $this->app->input->get('qfbackemail');
+        $field->hide = 1;
 
-        if ($field->value && $field->back) {
+        if ($this->get('qfshowf', $field)) {
+            $field->value = $this->app->input->get('qfbackemail');
+
+            if ($field->value && $field->back) {
+                $this->back = $field->back;
+            }
+
+            $this->chekRequired($field, $field->value);
+
+        } elseif ($field->back) {
             $this->back = $field->back;
         }
 
-        $field->hide = 1;
-        if($this->get('qfshowf', $field)) $this->chekRequired($field, $field->value);
         return $field;
     }
 
     protected function getRecaptcha($field)
     {
-      if ($this->ajaxform && $this->app->input->get('mod')!='qfajax') {
-          return;
-      }
-      if ($this->user->get('guest') || ! $this->get('show', $field)) {
-        $code= $this->app->input->get('recaptcha_response_field');
-        JPluginHelper::importPlugin('captcha');
-        $dispatcher = JDispatcher::getInstance();
-        $res = $dispatcher->trigger('onCheckAnswer',$code);
-        if(!$res[0]){
-          $this->errormes[] = JText::_('RECAPTCHA_ERROR');
+        if ($this->ajaxform && $this->app->input->get('mod')!='qfajax') {
+            return;
         }
-      }
+        if ($this->user->get('guest') || ! $this->get('show', $field)) {
+            $code= $this->app->input->get('recaptcha_response_field');
+            JPluginHelper::importPlugin('captcha', 'recaptcha');
+            $dispatcher = JDispatcher::getInstance();
+            $res = $dispatcher->trigger('onCheckAnswer', $code);
+            if (!$res[0]) {
+                $this->errormes[] = JText::_('RECAPTCHA_ERROR');
+            }
+        }
     }
 
     protected function getCalculatorSum($field)
     {
+        $this->calculated = true;
         $field->hide = 1;
         $field->label = $this->mlangLabel($this->get('label', $field));
         $field->unit = $this->mlangLabel($this->get('unit', $field));
         $field->pos = $this->get('pos', $field);
         $field->fixed = $this->get('fixed', $field, 0);
+        $field->format = $this->get('format', $field, 0);
         return $field;
     }
 
@@ -508,7 +620,9 @@ class qfFilds
     {
         $field->value = '';
         $cod = $this->get('customphp2', $field);
-        if(!$cod) return $field;
+        if (!$cod) {
+            return $field;
+        }
 
         $config = JFactory::getConfig();
         $tmpfname = tempnam($config->get('tmp_path'), "qf");
@@ -591,10 +705,10 @@ class qfFilds
         $replyto = isset($_POST ['qfuseremail'] [0])?$_POST ['qfuseremail'] [0]:'';
         $replytoname = isset($_POST ['qfusername'] [0])?$_POST ['qfusername'] [0]:'';
         if ($replyto) {
-            if($replytoname){
-              $mail->addReplyTo(JStringPunycode::emailToPunycode($replyto), $replytoname);
+            if ($replytoname) {
+                $mail->addReplyTo(JStringPunycode::emailToPunycode($replyto), $replytoname);
             } else {
-              $mail->addReplyTo(JStringPunycode::emailToPunycode($replyto));
+                $mail->addReplyTo(JStringPunycode::emailToPunycode($replyto));
             }
         } else {
             $mail->addReplyTo($mailfrom, $fromname);
@@ -615,7 +729,7 @@ class qfFilds
         $html = $this->modifyHtml($project, $html, $statid);
 
         $mail->setBody($html);
-        $mail->isHTML(true);
+        if ($project->emailparams->tmpl != 'simple') $mail->isHTML(true);
 
         $files = $this->app->input->files->get('inpfile', array(), 'array');
         foreach ($files as $file) {
@@ -654,7 +768,7 @@ class qfFilds
         $html = $this->modifyHtml($project, $html, $statid);
 
         $mail->setBody($html);
-        $mail->isHTML(true);
+        if ($project->emailparams->tmpl != 'simple') $mail->isHTML(true);
 
         $files = $this->app->input->files->get('inpfile', array(), 'array');
         foreach ($files as $file) {
@@ -682,9 +796,8 @@ class qfFilds
 
         if ($qfusername = strip_tags($this->getVal('qfusername', 0))) {
             $html = str_replace('{replacerName}', $qfusername, $html);
-        }
-        else{
-          $html = str_replace('{replacerName}', JText::_('QF_GUEST'), $html);
+        } else {
+            $html = str_replace('{replacerName}', JText::_('QF_GUEST'), $html);
         }
         $html = str_replace('{replacerId}', $statid, $html);
         $this->modify = str_replace('{replacerDate}', date("m.d.Y"), $html);

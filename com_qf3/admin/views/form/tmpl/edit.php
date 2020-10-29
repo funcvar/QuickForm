@@ -40,7 +40,7 @@ JFactory::getDocument()->addScriptDeclaration("
   <div class="formdiv">
     <table id="formtbl">
       <thead>
-        <tr><th class="l_td">label:<br /></th><th class="r_td">teg:<br /></th><th class="atr_td"></th><th class="del_td"></th></tr>
+        <tr><th class="l_td">label:<br /></th><th class="r_td">teg:<br /></th><th class="atr_td"></th><th class="del_td"></th><th class="drag_td"></th></tr>
       </thead>
       <tbody>
 				<?php
@@ -79,7 +79,7 @@ JFactory::getDocument()->addScriptDeclaration("
 								unset($option->label);
 								$calc = (isset($option->math) && $option->math !=='')?' calc':'';
 								$related = (isset($option->related) && $option->related)?' related':'';
-								$html .= '<div class="optionRow" data-settings="'.htmlentities(json_encode($option), ENT_QUOTES, 'UTF-8').'"><input name="qfoption" class="'.$calc.$related.'" type="text" value="'.$label.'" /><a href="#" class="setting"><img src="components/com_qf3/assets/setting.png"></a><a href="#" class="plus"><img src="components/com_qf3/assets/plus.png"></a><a href="#" class="delete"><img src="components/com_qf3/assets/delete.png"></a></div>';
+								$html .= '<div class="optionRow" data-settings="'.htmlentities(json_encode($option), ENT_QUOTES, 'UTF-8').'"><input name="qfoption" class="'.$calc.$related.'" type="text" value="'.$label.'" /><a href="#" class="setting">&#128736;</a><a href="#" class="plus">+</a><a href="#" class="delete">&#10006;</a></div>';
 							}
 							$html .= '</div>';
 						}
@@ -90,7 +90,7 @@ JFactory::getDocument()->addScriptDeclaration("
 
 						$req = (isset($row->required) && $row->required)?' req':'';
 
-						$html .= '</td><td class="r_td'.$req.'">'.$teg.'</td><td class="atr_td"><a href="#"><img src="components/com_qf3/assets/setting.png"></a></td><td class="del_td"><a href="#"><img src="components/com_qf3/assets/delete.png"></a></td></tr>';
+						$html .= '</td><td class="r_td'.$req.'">'.$teg.'</td><td class="atr_td"><a href="#">&#128736;</a></td><td class="drag_td"><a href="#">&#8661;</a></td><td class="del_td"><a href="#">&#10006;</a></td></tr>';
 					}
 					echo $html;
 				}

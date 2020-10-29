@@ -11,6 +11,7 @@ JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
 
 $user      = JFactory::getUser();
+$params = JComponentHelper::getParams('com_qf3');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $canOrder  = $user->authorise('core.edit.state', 'com_qf3');
@@ -69,6 +70,11 @@ if ($saveOrder)
 				<?php echo JText::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
 			</div>
 		<?php else : ?>
+			<?php if(!trim($params->get('cod'))){
+				// if ($this->items[0]->hits || sizeof($this->items)>1) {
+				// 	echo '<div style="color:red">'.JText::_('QF_ACTIVATE_QF').'</div>';
+				// }
+			} ?>
 			<table class="table table-striped" id="projectsList">
 			<thead>
 				<tr>

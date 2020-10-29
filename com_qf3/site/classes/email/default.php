@@ -45,8 +45,10 @@ class qfEmail_tmpl extends qfEmail
                     $html .= '<tr><td colspan="2">' . $this->mlangLabel($fild->label) . '</td></tr>';
                 } elseif ($fild->teg == 'customPhp' && !$fild->label) {
                     $html .= '<tr><td colspan="2">' . $this->mlangLabel($fild->value) . '</td></tr>';
-                } elseif ($fild->teg == 'qfincluder') {
-                    $html .= $this->getRows($fild->data);
+                } elseif (isset($fild->hideone) && $fild->hideone) {
+                    if (isset($fild->data) && ! empty($fild->data)) {
+                        $html .= $this->getRows($fild->data);
+                    }
                 } else {
                     $html .= $this->getTr($fild);
                     if (isset($fild->data) && ! empty($fild->data)) {
@@ -70,25 +72,29 @@ class qfEmail_tmpl extends qfEmail
                 foreach ($fild->data as $row) {
                     if (! $i) {
                         $html .= '<tr>';
-                        if(isset($fild->numbering) && $fild->numbering){
-                          $html .= '<th>' . $this->mlangLabel($fild->numbering) . '</th>';
+                        if (isset($fild->numbering) && $fild->numbering) {
+                            $html .= '<th>' . $this->mlangLabel($fild->numbering) . '</th>';
                         }
                         foreach ($row as $item) {
                             if (! isset($item->hide) || ! $item->hide) {
-                                $html .= '<th>' . $this->mlangLabel($item->label) . '</th>';
+                                if (! isset($item->hideone) || ! $item->hideone) {
+                                    $html .= '<th>' . $this->mlangLabel($item->label) . '</th>';
+                                }
                             }
                         }
                         $i ++;
                         $html .= '</tr>';
                     }
                     $html .= '<tr>';
-                    if(isset($fild->numbering) && $fild->numbering){
-                      $html .= '<td style="padding-left:10px;border-color:#fff;">' . $n . '</td>';
-                      $n ++;
+                    if (isset($fild->numbering) && $fild->numbering) {
+                        $html .= '<td style="padding-left:10px">' . $n . '</td>';
+                        $n ++;
                     }
                     foreach ($row as $item) {
                         if (! isset($item->hide) || ! $item->hide) {
-                            $html .= $this->getTdValCloner($item);
+                            if (! isset($item->hideone) || ! $item->hideone) {
+                                $html .= $this->getTdValCloner($item);
+                            }
                         }
                     }
                     $html .= '</tr>';
@@ -96,9 +102,9 @@ class qfEmail_tmpl extends qfEmail
             } else {
                 foreach ($fild->data as $row) {
                     $html .= '<tr><td colspan="2">';
-                    if(isset($fild->numbering) && $fild->numbering){
-                      $html .= '<div style="font:120% serif;padding:10px 0px 5px 10px;">'.$fild->numbering.' '. $n . '</div>';
-                      $n ++;
+                    if (isset($fild->numbering) && $fild->numbering) {
+                        $html .= '<div style="font:120% serif;padding:10px 0px 5px 10px;">'.$fild->numbering.' '. $n . '</div>';
+                        $n ++;
                     }
                     $html .= '<table border="1" width="100%" style="border-color:#e7e7e7;" cellpadding="5" cellspacing="0">';
                     $html .= $this->getRows($row);
@@ -116,35 +122,19 @@ class qfEmail_tmpl extends qfEmail
     {
         $html = '';
         $html .= '<tr>';
-        $html .= '<td style="padding-left:10px;border-color:#fff;">' . $this->mlangLabel($this->letLable($fild)) . '</td>';
-        $html .= '<td style="padding-left:10px;border-color:#fff;">' . $this->mlangLabel($fild->value) . '</td>';
+        $html .= '<td style="padding-left:10px">' . $this->mlangLabel($this->letLable($fild)) . '</td>';
+        $html .= '<td style="padding-left:10px">' . $this->mlangLabel($fild->value) . '</td>';
         $html .= '</tr>';
         return $html;
     }
 
 
-    // protected function getTdVal($fild)
-    // {
-    //     $html = '';
-    //     if ($fild->teg == 'input[checkbox]') {
-    //         $html .= '<td style="padding-left:10px;border-color:#fff;">' . ($fild->value ? (JText::_('JYES')) : (JText::_('JNO'))) . '</td>';
-    //     } else {
-    //         $html .= '<td style="padding-left:10px;border-color:#fff;">' . $this->mlangLabel($fild->value) . '</td>';
-    //     }
-    //     return $html;
-    // }
-
     protected function getTdValCloner($fild)
     {
-        $html = '';
-        // if ($fild->teg == 'input[checkbox]') {
-        //     $html .= '<td style="padding-left:10px;border-color:#fff;">' . ($fild->value ? (JText::_('JYES')) : (JText::_('JNO')));
-        // } else {
-          $html .= '<td style="padding-left:10px;border-color:#fff;">' . $this->mlangLabel($fild->value);
-        // }
+        $html = '<td style="padding-left:10px">' . $this->mlangLabel($fild->value);
 
         if (isset($fild->data) && ! empty($fild->data)) {
-          $html .= str_replace(array('<td','<tr','</td>','</tr>'),array('<span','<div',' </span>','</div>'),$this->getRows($fild->data));
+            $html .= str_replace(array('<td','<tr','</td>','</tr>'), array('<span','<div',' </span>','</div>'), $this->getRows($fild->data));
         }
 
         $html .= '</td>';
@@ -156,14 +146,23 @@ class qfEmail_tmpl extends qfEmail
     {
         $html = '';
         foreach ($calculator as $arr) {
-            $sum = number_format($arr [0], (int) $arr [1] [3], ',', ' ');
-            $html .= '<tr>';
-            $html .= '<td align="right" style="padding:10px;border-color:#fff;">' . $arr [1] [0] . '</td>';
-            if ($arr [1] [2]) {
-                $html .= '<td style="padding:10px;border-color:#fff;">' . $sum . ' ' . $arr [1] [1] . '</td>';
+            if (!$arr[1]->format) {
+                $sum = number_format($arr[0], (int) $arr[1]->fixed, ',', ' ');
+            } elseif ($arr[1]->format == 1) {
+                $sum = number_format($arr[0], (int) $arr[1]->fixed, '.', ',');
             } else {
-                $html .= '<td style="padding:10px;border-color:#fff;">' . $arr [1] [1] . ' ' . $sum . '</td>';
+                $sum = number_format($arr[0], (int) $arr[1]->fixed, '.', '');
             }
+
+            $html .= '<tr>';
+            $html .= '<td align="right" style="padding:10px">' . $arr[1]->label . '</td>';
+
+            if ($arr[1]->pos) {
+                $html .= '<td style="padding:10px">' . $sum . ' ' . $arr[1]->unit . '</td>';
+            } else {
+                $html .= '<td style="padding:10px">' . $arr[1]->unit . ' ' . $sum . '</td>';
+            }
+
             $html .= '</tr>';
         }
 
