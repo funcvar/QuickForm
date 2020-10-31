@@ -42,6 +42,7 @@
 
 	<languages folder="site">
 		<language tag="en-GB">language/en-GB.com_qf3.ini</language>
+		<language tag="fr-FR">language/fr-FR.com_qf3.ini</language>
 		<language tag="ru-RU">language/ru-RU.com_qf3.ini</language>
 	</languages>
 
@@ -66,8 +67,10 @@
 		</files>
 		<languages folder="admin">
 			<language tag="en-GB">language/en-GB/en-GB.com_qf3.ini</language>
+			<language tag="fr-FR">language/fr-FR/fr-FR.com_qf3.ini</language>
 			<language tag="ru-RU">language/ru-RU/ru-RU.com_qf3.ini</language>
 			<language tag="en-GB">language/en-GB/en-GB.com_qf3.sys.ini</language>
+			<language tag="fr-FR">language/fr-FR/fr-FR.com_qf3.sys.ini</language>
 			<language tag="ru-RU">language/ru-RU/ru-RU.com_qf3.sys.ini</language>
 		</languages>
 	</administration>
