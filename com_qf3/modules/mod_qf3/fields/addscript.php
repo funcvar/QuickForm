@@ -13,7 +13,7 @@ class JFormFieldAddscript extends JFormField
     protected function getInput()
     {
         $doc = JFactory::getDocument();
-        $doc->addScript(JURI::root(true) . "/modules/mod_qf3/js/qf_mod.js");
+        $doc->addScript(JURI::root(true) . "/modules/mod_qf3/assets/js/qf_mod.js");
 
         $this->lang = JFactory::getLanguage();
         $this->lang->load('com_qf3');

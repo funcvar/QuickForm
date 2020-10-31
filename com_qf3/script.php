@@ -93,14 +93,14 @@ class com_qf3InstallerScript
 
     public function uninstall($parent)
     {
-				$db = JFactory::getDBO();
-				$status = new stdClass;
-				$manifest = $parent->getParent()->manifest;
-				$status->modules = array();
-				$status->plugins = array();
-				$status->component = $manifest;
+        $db = JFactory::getDBO();
+        $status = new stdClass;
+        $manifest = $parent->getParent()->manifest;
+        $status->modules = array();
+        $status->plugins = array();
+        $status->component = $manifest;
 
-				$plugins = $manifest->xpath('plugins/plugin');
+        $plugins = $manifest->xpath('plugins/plugin');
 
         foreach ($plugins as $plugin) {
             $name = (string)$plugin->attributes()->plugin;
@@ -298,7 +298,7 @@ class com_qf3InstallerScript
         </table>
 				</div>
 				<div class="qfdivfooter">
-					<div class="qfdivfooterinner"><?php echo JText::_('QF_INSTALLATION_MESS_1'); ?> <a href="index.php?option=com_qf3&view=projects"><?php echo JText::_('QF_INSTALLATION_MESS_2'); ?></a>.
+					<div class="qfdivfooterinner"><a href="index.php?option=com_qf3&view=projects"><?php echo JText::_('QF_INSTALLATION_MESS_2'); ?></a>.
 					</div>
 				</div>
     <?php

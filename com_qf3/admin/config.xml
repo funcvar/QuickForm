@@ -5,97 +5,60 @@
 		name="show"
 		label="QuickForm 3"
 		description="">
+
 		<field type="version" />
+
 		<field
-			name="display"
-			type="radio"
-			default="0"
-			label="QF_REFERENCE_TO_THE_AUTHOR"
-			description="">
-			<option
-				value="0">QF_SIMPLE</option>
-			<option
-				value="1">QF_INVISIBLE</option>
-			<option
-				value="2">QF_REMOVE</option>
+			name="filesmod" type="radio" default="0" label="QF_UPLOAD_FILES" description="QF_UPLOAD_FILES_DESCR">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
 		</field>
+
+		<field
+			name="shopmod" type="radio" default="0" label="QF_SHOPMOD">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field
+			name="display" type="radio" default="0" label="QF_REFERENCE_TO_THE_AUTHOR">
+			<option value="0">QF_SIMPLE</option>
+			<option value="1">QF_INVISIBLE</option>
+			<option value="2">QF_REMOVE</option>
+		</field>
+
 		<field type="donation" />
-		<field name="cod"
-			type="text"
-			label="QF_ENTER_THE_CODE"
-			description="Obtain and enter the code to remove copyright studio"
-			class="inputbox"
-			size="30"
-		/>
+
+		<field name="cod" type="text" label="QF_ENTER_THE_CODE"/>
 	</fieldset>
 
 	<fieldset
-		name="cart"
-		label="Cart config"
-		description="">
+		name="services"
+		label="QF_SERVICES_LABEL"
+		>
+		<field type="recaptcha" />
 
-		<field type="spacer" class="cartfilds" label=" "/>
-		<field type="spacer" class="cartfilds" label="Minicart set:"/>
-		<field type="spacer" class="cartfilds" label=" "/>
-
-		<field name="pcsdir" type="radio" default="1" class="cartfilds" label="PCs:" description="">
-			<option value="1">before</option>
-			<option value="0">after</option>
+		<field
+			name="recaptcha_theme" type="list" default="0" label="QF_THEME">
+			<option value="0">Light</option>
+			<option value="1">dark</option>
 		</field>
 
-		<field name="pcs" type="text" class="cartfilds" default="" label="PCs:" description=""/>
-
-		<field name="img" type="text" class="cartfilds" default="/modules/mod_qf3/imgs/cart_0.png" label="img:" description=""/>
-
-		<field type="spacer" class="cartfilds" label=" "/>
-		<field type="spacer" class="cartfilds" label="Bigcart set:"/>
-		<field type="spacer" class="cartfilds" label=" "/>
-
-		<field name="text_before_cart" type="textarea" class="cartfilds" default="" label="before cart:" description="" filter="safehtml"/>
-
-		<field name="text_after_cart_1" type="textarea" class="cartfilds" default="" label="after table:" description="" filter="safehtml"/>
-
-		<field name="text_after_cart_2" type="textarea" class="cartfilds" default="" label="after cart:" description="" filter="safehtml"/>
-
-
-		<field name="delivery" type="text" class="cartfilds" default="" label="Delivery: (project id)" description="delivery, payment, contacts, etc."/>
-
-		<field name="payment" type="text" class="cartfilds" default="" label="Payment: (project id)" description="delivery, payment, contacts, etc."/>
-
-		<field name="contacts" type="text" class="cartfilds" default="" label="Contacts: (project id)" description="delivery, payment, contacts, etc."/>
-
-		<field type="spacer" class="cartfilds" label=" "/>
-
-		<field name="text_1" type="text" class="cartfilds" default="QF_ORDER_PRICE" label="QF_ORDER_PRICE" description=""/>
-		<field name="text_2" type="text" class="cartfilds" default="QF_FINAL_PRICE" label="QF_FINAL_PRICE" description=""/>
-		<field name="text_3" type="text" class="cartfilds" default="QF_TO_ORDER" label="QF_TO_ORDER" description=""/>
-		<field name="text_4" type="text" class="cartfilds" default="QF_SEND_ORDER" label="QF_SEND_ORDER" description=""/>
-
-		<field type="spacer" class="cartfilds" label=" "/>
-
-		<field name="redirect" type="text" class="cartfilds" default="" label="redirect:" description=""/>
-
-
-		<field type="spacer" class="cartfilds" label=" "/>
-		<field type="spacer" class="cartfilds" label="Email set:"/>
-		<field type="spacer" class="cartfilds" label=" "/>
-
-		<field name="text_before" type="textarea" class="cartfilds" default="" label="before:" description="" filter="safehtml"/>
-
-		<field name="text_after" type="textarea" class="cartfilds" default="" label="after:" description="" filter="safehtml"/>
-
-		<field name="history" type="list" label="QF_DOHISTORY" description="" default="1">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
+		<field
+			name="recaptcha_show" type="list" default="0" label="QF_SHOW">
+			<option value="0">QF_ALL</option>
+			<option value="1">QF_GUEST</option>
 		</field>
 
-		<field name="toemail" type="text" size="40" label="JGLOBAL_EMAIL" description="QF_EMAIL_DESK"/>
+		<field
+			name="sitekey"
+			type="text"
+			label="QF_SITEKEY" />
 
-		<field name="subject" type="text" size="40" label="QF_SUBJECT" description=""/>
-
-		<field name="popmess" type="textarea" class="cartfilds" default="Your order has been successfully submitted." label="QF_MESSAGE" description=""/>
-
-
+		<field
+			name="serverkey"
+			type="text"
+			label="QF_SERVERKEY" />
 	</fieldset>
 
 	<fieldset

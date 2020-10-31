@@ -14,7 +14,7 @@ JHtml::_('script', 'administrator/components/com_qf3/assets/project.js', array('
 JHtml::_('stylesheet', 'administrator/components/com_qf3/assets/project.css', array('version' => 'auto'));
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_qf3&layout=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="project-form" class="form-validate form-horizontal">
+<form action="<?php echo JRoute::_('index.php?option=com_qf3&layout=edit&id=' . (int) $this->item->id); ?>" method="post" name="qfadminForm" id="project-form" class="form-validate form-horizontal">
 	<div class="form-horizontal">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'qfTab', array('active' => 'general')); ?>
 

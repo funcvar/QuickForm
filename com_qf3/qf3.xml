@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5" method="upgrade">
 	<name>com_qf3</name>
-	<creationDate>2018-10-21</creationDate>
+	<creationDate>2020-10-31</creationDate>
 	<author>funcvar</author>
 	<authorEmail>funcvar@gmail.com</authorEmail>
 	<authorUrl>http://plasma-web.ru/</authorUrl>
-	<copyright>(C) 2011-2018 plasma-web.ru</copyright>
+	<copyright>(C) 2011-2020 plasma-web.ru</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-	<version>1.2.02</version>
+	<version>2.0.01</version>
 	<description>Joomla Form Creator</description>
 	<scriptfile>script.php</scriptfile>
 	<install>
@@ -22,7 +22,7 @@
 	</uninstall>
 
 	<updateservers>
-		<server type="extension" priority="1" name="QuickForm 3">http://plasma-web.ru/downloads/qf3/update.xml</server>
+		<server type="extension" priority="1" name="QuickForm 3">http://plasma-web.ru/downloads/qf3v2/update.xml</server>
 	</updateservers>
 
 	<modules>
@@ -42,7 +42,6 @@
 
 	<languages folder="site">
 		<language tag="en-GB">language/en-GB.com_qf3.ini</language>
-		<language tag="fr-FR">language/fr-FR.com_qf3.ini</language>
 		<language tag="ru-RU">language/ru-RU.com_qf3.ini</language>
 	</languages>
 
@@ -61,17 +60,14 @@
 			<folder>sql</folder>
 			<folder>views</folder>
 			<folder>helpers</folder>
-			<folder>help</folder>
 			<folder>models</folder>
 			<folder>tables</folder>
 			<folder>controllers</folder>
 		</files>
 		<languages folder="admin">
 			<language tag="en-GB">language/en-GB/en-GB.com_qf3.ini</language>
-			<language tag="fr-FR">language/fr-FR/fr-FR.com_qf3.ini</language>
 			<language tag="ru-RU">language/ru-RU/ru-RU.com_qf3.ini</language>
 			<language tag="en-GB">language/en-GB/en-GB.com_qf3.sys.ini</language>
-			<language tag="fr-FR">language/fr-FR/fr-FR.com_qf3.sys.ini</language>
 			<language tag="ru-RU">language/ru-RU/ru-RU.com_qf3.sys.ini</language>
 		</languages>
 	</administration>

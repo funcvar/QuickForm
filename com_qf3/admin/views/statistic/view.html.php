@@ -53,7 +53,7 @@ class Qf3ViewStatistic extends JViewLegacy
 		JToolbarHelper::cancel('statistic.cancel', 'JTOOLBAR_CLOSE');
 
 		JToolbarHelper::divider();
-		JToolBarHelper::help('help', true);
+		JToolbarHelper::help('', false, '/administrator/index.php?option=com_qf3&task=help');
 	}
 
 }

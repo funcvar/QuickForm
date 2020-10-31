@@ -8,22 +8,92 @@ defined('_JEXEC') or die();
 class qfCart
 {
     public $back;
+    public $shopParams;
+    public $attachment;
+
 
     public function __construct()
     {
+        $this->qf_params = JComponentHelper::getParams('com_qf3');
+
         $this->lang = JFactory::getLanguage();
         $this->lang->load('com_qf3');
 
         $this->app = JFactory::getApplication();
         $this->session = JFactory::getSession();
-        $this->qf_params = JComponentHelper::getParams('com_qf3');
+
+
+        require_once JPATH_SITE.'/administrator/components/com_qf3/models/shopmod.php';
+        $model = JModelLegacy::getInstance('Shopmod', 'Qf3Model');
+        $this->shopParams = $model->config();
+
+        if ($this->qf_params->get('filesmod')) {
+            $this->attachment = $this->shopParams['addfiles'];
+        }
     }
+
+
+
+
+    public function getMiniCartHtml()
+    {
+        $cart = $this->session->get('qfcartbox');
+        $html = '';
+
+        if (!$cart) {
+            $cart = array();
+            $html .=  '<span class="qf_minicart_empty">'.JText::_('QF_EMPTY_CART').'</span>';
+        } else {
+            $flag = false;
+            $arr = array();
+
+            foreach ($cart as $row) {
+                if (sizeof($row['sum'])>1) {
+                    $flag = 'multi price item';
+                    break;
+                } else {
+                    $sum = $row['sum'][0][0];
+                    $currency = $row['sum'][0][1]->unit;
+
+                    if (!isset($arr[$currency])) {
+                        $arr[$currency] = $sum*$row['qt'];
+                    } else {
+                        $arr[$currency] += $sum*$row['qt'];
+                    }
+                }
+            }
+
+            if (sizeof($arr) != 1) {
+                $flag = 'multi currency cart';
+            }
+
+            if (!$flag) {
+                $sum = number_format($arr[$currency], $row['sum'][0][1]->fixed, ',', ' ');
+                $sum = $this->shopParams['pcsdir']?$currency.' '.$sum:$sum.' '.$currency;
+            } else {
+                $sum = sizeof($cart);
+            }
+
+            $html .=  '<span class="qf_cart_pcs">'.$this->mlangLabel($this->shopParams['pcs']).'</span><span class="qf_cart_sum">'.$sum.'</span>';
+        }
+
+        if ($path = $this->shopParams['img']) {
+            if (strpos($path, 'cart_0.png')) {
+                $i = sizeof($cart);
+                $path = str_replace('cart_0', 'cart_'.(($i>3)?3:$i), $path);
+            }
+            $html .=  '<span class="qf_cart_img"><img src="'.$path.'"></span>';
+        }
+
+        return $html;
+    }
+
+
 
 
     public function qfcartsubmit()
     {
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-        $html = '';
         $cart = $this->session->get('qfcartbox');
 
 
@@ -35,12 +105,31 @@ class qfCart
             $this->app->redirect($link, $msg, $msgtype);
         }
 
-        $html .= '<table border="1" width="100%" cellpadding="10" cellspacing="2" style="border: 1px solid rgb(203, 233, 245)">';
+        if ($this->attachment) {
+            require_once JPATH_COMPONENT.'/classes/attachment.php';
+            $attachment = new qfAttachment;
+        }
+
+        $num =0;
+        $html = '';
+
+        //check photo
+        $fl = false;
+        foreach ($cart as $row) {
+            if ($this->get('cartimglink', $row['project']->params)) {
+                $fl = true;
+                break;
+            }
+        }
+
+        $html .= '<table border="1" width="100%" style="border-color:#e7e7e7;" cellpadding="5" cellspacing="0">';
 
         $html .= '<tr>';
-        $html .= '<td class="qf_th">';
-        $html .= '<span>'.JText::_('QF_PHOTO').'</span>';
-        $html .= '</td>';
+        if ($fl) {
+            $html .= '<td class="qf_th">';
+            $html .= '<span>'.JText::_('QF_PHOTO').'</span>';
+            $html .= '</td>';
+        }
         $html .= '<td class="qf_th">';
         $html .= '<span>'.JText::_('QF_PRODUCT_SERVICE').'</span>';
         $html .= '</td>';
@@ -55,7 +144,6 @@ class qfCart
         $html .= '</td>';
         $html .= '</tr>';
 
-
         $rowssum = array();
 
         foreach ($cart as $row) {
@@ -65,17 +153,19 @@ class qfCart
 
             $html .= '<tr>';
 
-            $html .= '<td class="qf_td_2">';
-            if ($img = $this->get('cartimglink', $row['project']->params)) {
-                if (!strpos($img, '//')) {
-                    if (strpos($img, '/')===0) {
-                        $img = substr($img, 1);
+            if ($fl) {
+                $html .= '<td class="qf_td_2">';
+                if ($img = $this->get('cartimglink', $row['project']->params)) {
+                    if (!strpos($img, '//')) {
+                        if (strpos($img, '/')===0) {
+                            $img = substr($img, 1);
+                        }
+                        $img = JURI::root().$img;
                     }
-                    $img = JURI::root().$img;
+                    $html .= '<img src="'.$img.'" width="90%">';
                 }
-                $html .= '<img src="'.$img.'" width="90%">';
+                $html .= '</td>';
             }
-            $html .= '</td>';
 
             $html .= '<td class="qf_td_3">';
             $html .= '<h3>'.$row['project']->title.'</h3>';
@@ -112,14 +202,42 @@ class qfCart
             $html .= '</td>';
 
             $html .= '</tr>';
+
+            // files
+            if ($this->attachment == 2) {
+                $res = $attachment->getEmailAttachmentHtml($num);
+                if ($res == 'ERR_REQ_FILES') {
+                    $msg = JText::_('QF_ERR_REQ_FILES');
+                    $this->app->redirect($link, $msg, $msgtype);
+                }
+                if ($res) {
+                    $html .= '<tr>';
+                    $html .= '<td colspan=5>';
+                    $html .= $res;
+                    $html .= '</td>';
+                    $html .= '</tr>';
+                }
+            }
+            $num++;
+            // end files
         }
 
         $html .= '</table>';
 
+        // files
+        if ($this->attachment == 1) {
+            $res = $attachment->getEmailAttachmentHtml(-1);
+            if ($res == 'ERR_REQ_FILES') {
+                $msg = JText::_('QF_ERR_REQ_FILES');
+                $this->app->redirect($link, $msg, $msgtype);
+            }
+            $html .= $res;
+        }
+        // end files
 
         $confirm = $this->session->get('qfcartconfirm');
 
-        $html .= '<br><table border="1" width="100%" cellpadding="10" cellspacing="2" style="border: 1px solid rgb(203, 233, 245)">';
+        $html .= '<br><table border="1" width="100%" style="border-color:#e7e7e7;" cellpadding="5" cellspacing="0">';
         foreach ($confirm as $row) {
             $html .= '<tr>';
             $html .= '<td>';
@@ -142,9 +260,54 @@ class qfCart
         }
 
         if ($rowssum) {
+            // discounts
+            $promocod = $this->session->get('qfpromocod');
+            if ($promocod) {
+                $codes = explode('%', $this->shopParams['promocod']);
+                foreach ($codes as $cod) {
+                    $cod = trim($cod);
+                    if ($cod) {
+                        $pats = explode('-', $cod);
+                        if ($pats[0]==$promocod && $pats[1]) {
+                            $discount =  (float)$pats[1]*$rowssum[$currency]/100;
+                            $html .= '<tr>';
+                            $html .= '<td>';
+                            $html .= '<b>'.JText::_('QF_DISCOUNT'). ' ' .$pats[1].'%</b>';
+                            $html .= '</td>';
+                            $html .= '<td style="white-space: nowrap">';
+                            $html .= '<b>'.$discount.' '.$currency.'</b>'.'<br>';
+                            $html .= '</td>';
+                            $html .= '</tr>';
+                            $rowssum[$currency] -= $discount;
+                            break;
+                        }
+                    }
+                }
+            } elseif ($this->shopParams['discounts']) {
+                $discounts = preg_replace('/[^0-9\-%]/', '', $this->shopParams['discounts']);
+                $discounts = explode('%', $discounts);
+                foreach ($discounts as $discount) {
+                    $pats = explode('-', $discount);
+                    if ($pats[0] < $rowssum[$currency] && $rowssum[$currency] <= $pats[1]) {
+                        $disc = (float)$pats[2]*$rowssum[$currency]/100;
+                        $html .= '<tr>';
+                        $html .= '<td>';
+                        $html .= '<b>'.JText::_('QF_DISCOUNT'). ' ' .$pats[2].'%</b>';
+                        $html .= '</td>';
+                        $html .= '<td style="white-space: nowrap">';
+                        $html .= '<b>'.$disc.' '.$currency.'</b>'.'<br>';
+                        $html .= '</td>';
+                        $html .= '</tr>';
+                        $rowssum[$currency] -= $disc;
+                        break;
+                    }
+                }
+            }
+            // end discounts
+
             $html .= '<tr>';
             $html .= '<td>';
-            $html .= '<b>'.JText::_($this->qf_params->get('text_2')).'</b>';
+            $html .= '<b>'.JText::_($this->shopParams['text_2']).'</b>';
             $html .= '</td>';
             $html .= '<td style="white-space: nowrap">';
             foreach ($rowssum as $currency=>$sum) {
@@ -156,7 +319,7 @@ class qfCart
 
         $html .= '</table>';
 
-        $html = $this->qf_params->get('text_before') . $html . $this->qf_params->get('text_after');
+        $html = $this->shopParams['text_before'] . $html . $this->shopParams['text_after'];
 
         $project = $this->defProject();
 
@@ -174,22 +337,27 @@ class qfCart
 
         $sent = $qfFilds->sendMail($project, $html, $stat);
         if (!$sent) {
-            $msg = JText::_('COM_QF_EMAIL_WAS_NOT_SENT');
+            $msg = JText::_('COM_QF_NOT_COMPLETED');
             $this->app->redirect($link, $msg, $msgtype);
         }
 
-        $msg = $this->mlangLabel($this->qf_params->get('popmess'));
+        $msg = $this->mlangLabel($this->shopParams['popmess']);
         $msgtype = 'message';
 
         $this->session->set('qfcartbox', false);
         $this->session->set('qfcartconfirm', false);
+        $this->session->set('qfcartimg', false);
+        $this->session->set('qfpromocod', false);
 
-        if ($this->qf_params->get('redirect')) {
-            $link = $this->qf_params->get('redirect');
+        if ($this->shopParams['redirect']) {
+            $link = $this->shopParams['redirect'];
         }
 
         $this->app->redirect($link, $msg, $msgtype);
     }
+
+
+
 
     protected function defProject()
     {
@@ -197,19 +365,21 @@ class qfCart
         $project->id = 0;
         $project->params = new stdClass;
         $project->emailparams = new stdClass;
-        $project->params->history = $this->qf_params->get('history');
+        $project->params->history = $this->shopParams['history'];
 
-        $project->emailparams->toemail = $this->qf_params->get('toemail');
-        $project->emailparams->subject = $this->qf_params->get('subject');
+        $project->emailparams->toemail = $this->shopParams['toemail'];
+        $project->emailparams->subject = $this->shopParams['subject'];
 
         if (!$project->emailparams->subject) {
-            $project->emailparams->subject = 'You have a new order from address ' . JURI::root();
+            $project->emailparams->subject = $_SERVER['HTTP_HOST'] .' '. JText::_('QF_ORDER') . ' №' .time();
         }
 
         $project->title = $project->emailparams->subject;
 
         return $project;
     }
+
+
 
 
     public function confirmCart()
@@ -232,13 +402,13 @@ class qfCart
 
         $aid = array();
 
-        if ($v = $this->qf_params->get('payment')) {
+        if ($v = $this->shopParams['payment']) {
             $aid[0] = $v;
         }
-        if ($v = $this->qf_params->get('delivery')) {
+        if ($v = $this->shopParams['delivery']) {
             $aid[1] = $v;
         }
-        if ($v = $this->qf_params->get('contacts')) {
+        if ($v = $this->shopParams['contacts']) {
             $aid[2] = $v;
         }
 
@@ -257,6 +427,9 @@ class qfCart
 
         return 'yes';
     }
+
+
+
 
     public function updateCart()
     {
@@ -304,64 +477,6 @@ class qfCart
     }
 
 
-    public function getMiniCartHtml()
-    {
-        $cart = $this->session->get('qfcartbox');
-        $html = '';
-
-        if (!$cart) {
-            $cart = array();
-            $html .=  '<span class="qf_minicart_empty">'.JText::_('QF_EMPTY_CART').'</span>';
-        } else {
-            $pcs = '<span class="qf_cart_pcs">'.$this->mlangLabel($this->qf_params->get('pcs')).'</span>';
-            $insert = $this->getMiniCartRow($cart);
-            $html .=  $this->qf_params->get('pcsdir')?$pcs.$insert:$insert.$pcs;
-        }
-
-        if ($path = $this->qf_params->get('img')) {
-            if (strpos($path, 'cart_0.png')) {
-                $i = sizeof($cart);
-                $path = str_replace('cart_0', 'cart_'.(($i>3)?3:$i), $path);
-            }
-            $html .=  '<span class="qf_cart_img"><img src="'.$path.'"></span>';
-        }
-
-        return $html;
-    }
-
-    public function getMiniCartRow($cart)
-    {
-        $flag = false;
-        $arr = array();
-
-        foreach ($cart as $row) {
-            if (sizeof($row['sum'])>1) {
-                $flag = 'multi price item';
-                break;
-            } else {
-                $sum = $row['sum'][0][0];
-                $currency = $row['sum'][0][1]->unit;
-
-                if (!isset($arr[$currency])) {
-                    $arr[$currency] = $sum*$row['qt'];
-                } else {
-                    $arr[$currency] += $sum*$row['qt'];
-                }
-            }
-        }
-
-        if (sizeof($arr) != 1) {
-            $flag = 'multi currency cart';
-        }
-
-        if (!$flag) {
-            $insert = number_format($arr[$currency], $row['sum'][0][1]->fixed, ',', ' ') . ' ' . $currency;
-        } else {
-            $insert = sizeof($cart);
-        }
-
-        return  '<span class="qf_cart_sum">'.$insert.'</span>';
-    }
 
 
     public function pageCart()
@@ -374,16 +489,29 @@ class qfCart
             return  '<span class="qf_cart_empty">'.JText::_('QF_EMPTY_CART').'</span>';
         }
 
-        $html .= JText::_($this->qf_params->get('text_before_cart'));
+        if ($this->attachment) {
+            require_once JPATH_COMPONENT.'/classes/attachment.php';
+            $attachment = new qfAttachment;
+        }
+
+        //check photo
+        $fl = false;
+        foreach ($cart as $row) {
+            if ($this->get('cartimglink', $row['project']->params)) {
+                $fl = true;
+                break;
+            }
+        }
+
+        $html .= JText::_($this->shopParams['text_before_cart']);
 
         $html .= '<table>';
 
         $html .= '<tr>';
         $html .= '<td class="qf_th">';
-        $html .= '<span></span>';
-        $html .= '</td>';
-        $html .= '<td class="qf_th">';
-        $html .= '<span>'.JText::_('QF_PHOTO').'</span>';
+        if ($fl) {
+            $html .= '<span>'.JText::_('QF_PHOTO').'</span>';
+        }
         $html .= '</td>';
         $html .= '<td class="qf_th">';
         $html .= '<span>'.JText::_('QF_PRODUCT_SERVICE').'</span>';
@@ -397,7 +525,12 @@ class qfCart
         $html .= '<td class="qf_th">';
         $html .= '<span>'.JText::_('QF_AMOUNT').'</span>';
         $html .= '</td>';
+        $html .= '<td class="qf_th">';
+        $html .= '<span></span>';
+        $html .= '</td>';
         $html .= '</tr>';
+
+        $num =0;
 
         foreach ($cart as $row) {
             if ($langlink = $this->get('languagelink', $row['project']->params)) {
@@ -405,10 +538,6 @@ class qfCart
             }
 
             $html .= '<tr>';
-
-            $html .= '<td class="qf_td_1">';
-            $html .= '<span>✕</span>';
-            $html .= '</td>';
 
             $html .= '<td class="qf_td_2">';
             if ($img = $this->get('cartimglink', $row['project']->params)) {
@@ -453,11 +582,78 @@ class qfCart
             }
             $html .= '</td>';
 
+            $html .= '<td class="qf_td_1">';
+            $html .= '<span>✕</span>';
+            $html .= '</td>';
+
             $html .= '</tr>';
+
+            // files
+            if ($this->attachment == 2) {
+                $html .= '<tr>';
+                $html .= '<td colspan=5>';
+                $html .= '<div class="atch">' . $attachment->getCartAttachmentHtml($num) . '</div>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            // end files
+            $num ++;
         }
         $html .= '</table>';
 
-        $html .= JText::_($this->qf_params->get('text_after_cart_1'));
+        // files
+        if ($this->attachment == 1) {
+            $html .= '<div class="atch">' . $attachment->getCartAttachmentHtml(-1) . '</div>';
+        }
+        // end files
+
+        $html .= JText::_($this->shopParams['text_after_cart_1']);
+
+        // discounts
+        $promocod = trim($this->shopParams['promocod']);
+        $discounts = trim($this->shopParams['discounts']);
+
+        if ($discounts || $promocod) {
+            $html .= '<script>var qf_txt_discount="'.JText::_('QF_DISCOUNT').'";';
+            if ($promocod) {
+                $html .= 'var qf_txt_dis="'.JText::_('QF_DISABLE').'", qf_txt_act="'.JText::_('QF_ACTIVATE').'";';
+            }
+
+            if ($discounts) {
+                $discounts = preg_replace('/[^0-9\-%]/', '', $discounts);
+                $html .= 'var qf_cart_discount="'.$discounts.'";';
+            }
+            else {
+                $html .= 'var qf_cart_discount="";';
+            }
+            $html .= '</script>';
+
+            $html .= '<div class="qf_cart_discount">';
+
+            if ($discounts && !$promocod) {
+                if (isset($currency)) {
+                    $html .= '<div class="discount_mess">'.JText::_('QF_OFFER_DISCOUNTS_1').' '.(int) $discounts.' '.$currency.'</div>';
+                }
+            } else {
+                if ($discounts && $promocod) {
+                    $html .= '<div class="discount_mess">'.JText::_('QF_OFFER_DISCOUNTS_2').'</div>';
+                }
+                $html .= '<form class="discount_inp" autocomplete="off">';
+
+                $promocod = $this->session->get('qfpromocod');
+                if ($promocod) {
+                    $html .= '<label>'.JText::_('QF_PROMOCOD_TXT').'</label><input type="text" required name="disinp" value="'.$promocod.'">';
+                    $html .= '<input type="button" value="'.JText::_('QF_DISABLE').'" name="disbut" class="enabled">';
+                } else {
+                    $html .= '<label>'.JText::_('QF_PROMOCOD_TXT').'</label><input type="text" required name="disinp" value="">';
+                    $html .= '<input type="button" value="'.JText::_('QF_ACTIVATE').'" name="disbut">';
+                }
+                $html .= '</form>';
+            }
+
+            $html .= '</div>';
+        }
+        //end discounts
 
         $html .= '<div class="qf_cart_foot">';
         $html .= '<div class="qf_cart_foot_l">';
@@ -471,16 +667,39 @@ class qfCart
         $html .= '</div>';
         $html .= '</div>';
 
-        $html .= JText::_($this->qf_params->get('text_after_cart_2'));
+        $html .= JText::_($this->shopParams['text_after_cart_2']);
 
         return $html;
     }
 
+
+
+
+    public function qfcartpromocod()
+    {
+        $usercod = $this->app->input->get('cod', '', 'str');
+        $codes = explode('%', $this->shopParams['promocod']);
+        foreach ($codes as $cod) {
+            $cod = trim($cod);
+            if ($cod) {
+                $pats = explode('-', $cod);
+                if ($pats[0]==$usercod && $pats[1]) {
+                    $this->session->set('qfpromocod', $pats[0]);
+                    return (float)$pats[1];
+                }
+            }
+        }
+        $this->session->set('qfpromocod', false);
+    }
+
+
+
+
     protected function boxSubmit()
     {
         $html = '<div class="qf_cart_btn">';
-        if ($id = $this->qf_params->get('contacts')) {
-            $html .= '<input name="qfcartnext2" type="button" class="btn qfcartsubmit" value="' . JText::_($this->qf_params->get('text_3')) . '" onclick="QFcart.cartnext()" />';
+        if ($id = $this->shopParams['contacts']) {
+            $html .= '<input name="qfcartnext2" type="button" class="btn qfcartsubmit" value="' . JText::_($this->shopParams['text_3']) . '" onclick="QFcart.cartnext()" />';
         } else {
             $html .= $this->boxSubmitS();
         }
@@ -488,12 +707,16 @@ class qfCart
         return $html;
     }
 
+
+
+
     protected function boxSubmitS()
     {
         $html = '';
-        $html .= '<form method="post" class="cart_form"><input name="task" type="hidden" value="qfcartsubmit"><input name="root" type="hidden" value="'.JURI::current().'"><input name="option" type="hidden" value="com_qf3">' . JHtml::_('form.token') . '<input name="qfcartsubmit" type="button" class="btn qfcartsubmit" value="' . JText::_($this->qf_params->get('text_4')) . '" onclick="this.form.cartsubmit()" /></form>';
+        $html .= '<form method="post" class="cart_form"><input name="task" type="hidden" value="qfcartsubmit"><input name="root" type="hidden" value="'.JURI::current().'"><input name="option" type="hidden" value="com_qf3">' . JHtml::_('form.token') . '<input name="qfcartsubmit" type="button" class="qfcartsubmit" value="' . JText::_($this->shopParams['text_4']) . '" onclick="this.form.cartsubmit()" /></form>';
         return $html;
     }
+
 
 
 
@@ -501,9 +724,9 @@ class qfCart
     {
         $html = '';
         if ($rowssum) {
-            $html .= '<h3>'.$this->mlangLabel($this->qf_params->get('text_1')).'</h3>';
+            $html .= '<h3>'.$this->mlangLabel($this->shopParams['text_1']).'</h3>';
         }
-        $html .= '<div id="qf_resultprice">';
+        $html .= '<div id="qf_resultprice" data-text_price_total="'.$this->mlangLabel($this->shopParams['text_2']).'">';
         foreach ($rowssum as $unit=>$sum) {
             $html .= '<input name="qfprice[]" type="hidden" value="'.$sum.'" data-unit="'.$unit.'" />';
         }
@@ -511,11 +734,14 @@ class qfCart
         return $html;
     }
 
+
+
+
     protected function getContacts()
     {
         $html = '';
 
-        if ($id = $this->qf_params->get('contacts')) {
+        if ($id = $this->shopParams['contacts']) {
             require_once JPATH_COMPONENT.'/classes/buildform.php';
             $QuickForm = new QuickForm3;
 
@@ -533,11 +759,14 @@ class qfCart
         return $html;
     }
 
+
+
+
     protected function getPayment()
     {
         $html = '';
 
-        if ($id = $this->qf_params->get('payment')) {
+        if ($id = $this->shopParams['payment']) {
             require_once JPATH_COMPONENT.'/classes/buildform.php';
             $QuickForm = new QuickForm3;
 
@@ -552,11 +781,14 @@ class qfCart
         return $html;
     }
 
+
+
+
     protected function getDelivery()
     {
         $html = '';
 
-        if ($id = $this->qf_params->get('delivery')) {
+        if ($id = $this->shopParams['delivery']) {
             require_once JPATH_COMPONENT.'/classes/buildform.php';
             $QuickForm = new QuickForm3;
 
@@ -572,13 +804,19 @@ class qfCart
     }
 
 
+
+
     protected function get($k, $ar, $def = false)
     {
+        $ar = (object)$ar;
         if (isset($ar->$k)) {
             return $ar->$k;
         }
         return $def;
     }
+
+
+
 
     protected function getCartRow($data, $need_ul = true)
     {
@@ -630,6 +868,9 @@ class qfCart
         return $html;
     }
 
+
+
+
     public function changeRowCart($i, $v)
     {
         if ($v) {
@@ -645,6 +886,9 @@ class qfCart
             return $this->removeRowCart($i);
         }
     }
+
+
+
 
     public function removeRowCart($i)
     {
@@ -666,6 +910,8 @@ class qfCart
     }
 
 
+
+
     protected function mlangLabel($val)
     {
         if (strpos($val, 'QF_')===0) {
@@ -673,6 +919,8 @@ class qfCart
         }
         return $val;
     }
+
+
 
 
     protected function letLable($field)

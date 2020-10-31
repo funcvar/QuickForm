@@ -10,11 +10,29 @@ class Qf3Helper
 {
 	public static function addSubmenu($vName)
 	{
+		$qf_config = JComponentHelper::getParams('com_qf3');
+
 		JHtmlSidebar::addEntry(
 			JText::_('QF_PROGECTS_LIST'),
 			'index.php?option=com_qf3&view=projects',
 			$vName == 'projects'
 		);
+
+		if($qf_config->get('shopmod')) {
+			JHtmlSidebar::addEntry(
+				JText::_('QF_SHOPMOD_SET'),
+				'index.php?option=com_qf3&view=shopmod',
+				$vName == 'shopmod'
+			);
+		}
+
+		if($qf_config->get('filesmod')) {
+			JHtmlSidebar::addEntry(
+				JText::_('QF_FILES_SET'),
+				'index.php?option=com_qf3&view=folders',
+				$vName == 'folders'
+			);
+		}
 
 		JHtmlSidebar::addEntry(
 			JText::_('QF_HISTORY'),
@@ -23,7 +41,7 @@ class Qf3Helper
 		);
 
 		JHtmlSidebar::addEntry(
-			JText::_('QF_GLOBAL_SETTINGS_A'),
+			JText::_('QF_GLOBAL_SET'),
 			'index.php?option=com_config&view=component&component=com_qf3',
 			$vName == 'component'
 		);

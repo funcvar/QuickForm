@@ -55,7 +55,7 @@ class qfCalculator_tmpl extends qfCalculator
                     $setsarray = array_merge($setsarray, $arr);
                 }
             } elseif ($field->teg == 'calculatorSum') {
-                $setsarray[$field->fildid] = $field;
+                $setsarray[$field->fieldid] = $field;
             } else {
                 if (isset($field->data) && ! empty($field->data)) {
                     $arr = $this->CalcArray($field->data);

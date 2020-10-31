@@ -13,7 +13,7 @@ abstract class qfCalculator
     {
         if(!$project->calculated) return false;
 
-        $file = JPATH_COMPONENT.'/classes/calculator/'.$project->calculatorparams->calculatortype.'.php';
+        $file = __DIR__.'/calculator/'.$project->calculatorparams->calculatortype.'.php';
         if (file_exists($file)) {
             require_once($file);
         } else {

@@ -15,8 +15,13 @@ class Qf3Controller extends JControllerLegacy
 	{
 		require_once JPATH_COMPONENT . '/helpers/qf3.php';
 
-		if($this->input->get('task', '')=='ajax'){
+		if($this->input->get('task')=='ajax'){
 			require_once JPATH_COMPONENT.'/helpers/ajax.php';
+			exit;
+		}
+
+		if($this->input->get('task')=='help'){
+			echo JText::_('QF_HELP_WINDOW');
 			exit;
 		}
 

@@ -13,17 +13,17 @@ $app = JFactory::getApplication();
 $task = $app->input->get('task');
 
 if($task =='ajax'){
-	require_once JPATH_COMPONENT.'/helpers/ajax.php';
+	require_once __DIR__.'/helpers/ajax.php';
 	exit;
 }
 elseif($task =='qfcartsubmit') {
-	require_once JPATH_COMPONENT.'/classes/qfcart.php';
+	require_once __DIR__.'/classes/qfcart.php';
 	$qfCart = new qfCart;
 	$qfCart->qfcartsubmit();
 }
 else{
 
-	require_once JPATH_COMPONENT.'/classes/buildemail.php';
+	require_once __DIR__.'/classes/buildemail.php';
 	$qfFilds = new qfFilds;
 
 	$qfFilds->qfcheckToken();
@@ -50,19 +50,28 @@ else{
 		$app->redirect($link, $msg, $msgtype);
 	}
 
+	if($qfFilds->fileListToServer) {
+		$html = $qfFilds->uploadfiles($html);
+		if ($err = $qfFilds->getErrormes()) {
+			$msg = implode('<br>', $err);
+			$app->redirect($link, $msg, $msgtype);
+		}
+	}
+
+
 	$stat = $qfFilds->writeStat($project, $html);
 	if(!$stat){
 		$msg = JText::_('COM_QF_NOT_COMPLETED');
 		$app->redirect($link, $msg, $msgtype);
 	}
 
-	$sent = $qfFilds->sendMail($project, $html, $stat);
-	if(!$sent){
-		$msg = JText::_('COM_QF_EMAIL_WAS_NOT_SENT');
+	$send = $qfFilds->sendMail($project, $html, $stat);
+	if(!$send){
+		$msg = JText::_('COM_QF_NOT_COMPLETED');
 		$app->redirect($link, $msg, $msgtype);
 	}
 
-	$msg = $qfFilds->mlangLabel($project->formparams->thnq_message);
+	$msg = $qfFilds->translate($project->formparams->thnq_message);
 	$msgtype = 'message';
 
 	if($qfFilds->redirect) $link = $qfFilds->redirect;

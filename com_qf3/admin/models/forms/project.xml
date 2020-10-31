@@ -49,7 +49,7 @@
 				<option value="on">on</option>
 				<option value="off">off</option>
 			</field>
-			<field name="thnq_message" type="textarea" size="40" label="QF_MESSAGE" filter="raw" default="Thank you for contacting us" required="true"/>
+			<field name="thnq_message" type="textarea" size="40" label="QF_MESSAGE" filter="raw" default="QF_MESSAGE_INNER" translate_default="true"/>
 		</fieldset>
 	</fields>
 
@@ -58,11 +58,11 @@
 			<field name="toemail" type="text" size="40" label="QF_ALTER_EMAIL" description="QF_EMAIL_DESK"/>
 			<field name="subject" type="text" size="40" label="QF_SUBJECT" description=""/>
 			<field name="tmpl" type="tmpllist" label="QF_LETTER_TMPL" description="" size="1" default="default"/>
-			<field name="showtitle" type="list" label="QF_SHOWTITLE" description="QF_SHOWTITLE_DESK" default="0">
+			<field name="showtitle" type="list" label="QF_SHOWTITLE" description="QF_SHOWTITLE_DESK" default="1">
 				<option value="0">JYES</option>
 				<option value="1">JNO</option>
 			</field>
-			<field name="showurl" type="list" label="QF_SHOWURL" description="" default="0">
+			<field name="showurl" type="list" label="QF_SHOWURL" description="" default="1">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
@@ -76,7 +76,7 @@
 			<field name="calculatortype" type="radio" label="QF_CALCULATOR_TYPE" description="" class="btn-group btn-group-yesno" default="0">
 				<option value="0">JNO</option>
 				<option value="default">default</option>
-				<option value="multipl">multipl</option>
+				<option value="multipl">multiple</option>
 				<option value="simple">simple</option>
 				<option value="custom">custom</option>
 			</field>

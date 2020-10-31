@@ -1,0 +1,7 @@
+<FilesMatch "\.(php|cgi|pl|php3|php4|php5|php6|php7|phps|phtml|shtml|py)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+<FilesMatch "\.*">
+SetHandler none
+</FilesMatch>

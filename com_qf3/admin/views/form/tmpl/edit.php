@@ -14,6 +14,7 @@ JHtml::_('behavior.keepalive');
 $this->document->addScript( '//code.jquery.com/ui/1.11.4/jquery-ui.min.js', 'text/javascript');
 
 JFactory::getDocument()->addScriptDeclaration("
+		var qf_filesmod = '".$this->qf_params->get('filesmod')."';
 		Joomla.submitbutton = function(task)
 		{
 			if (task == 'addfild')
@@ -65,10 +66,9 @@ JFactory::getDocument()->addScriptDeclaration("
 							}
 						}
 						else{
-							$title = (isset($row->placeholder) && $row->placeholder)?'<div class="qfsmoll">'.$row->placeholder.'</div>':'';
 							$calc = (isset($row->math) && $row->math !=='')?' calc':'';
 							$related = (isset($row->related) && $row->related)?' related':'';
-							$inplab = $title.'<input name="qfllabel" type="text" value="'.$label.'" class="qflabelclass'.$calc.$related.'" />';
+							$inplab = '<div class="qfsmoll"></div><input name="qfllabel" type="text" value="'.$label.'" class="qflabelclass'.$calc.$related.'" />';
 						}
 
 						$html .= '<tr data-settings="'.htmlentities(json_encode($row), ENT_QUOTES, 'UTF-8').'"><td class="l_td">'.$inplab;
@@ -88,9 +88,7 @@ JFactory::getDocument()->addScriptDeclaration("
 							$teg = '<span class="smbtogl"></span> <a href="#" class="optionstogler">'.$row->teg.'</a>';
 						else $teg = $row->teg;
 
-						$req = (isset($row->required) && $row->required)?' req':'';
-
-						$html .= '</td><td class="r_td'.$req.'">'.$teg.'</td><td class="atr_td"><a href="#">&#128736;</a></td><td class="drag_td"><a href="#">&#8661;</a></td><td class="del_td"><a href="#">&#10006;</a></td></tr>';
+						$html .= '</td><td class="r_td">'.$teg.'</td><td class="atr_td"><a href="#">&#128736;</a></td><td class="drag_td"><a href="#">&#8661;</a></td><td class="del_td"><a href="#">&#10006;</a></td></tr>';
 					}
 					echo $html;
 				}

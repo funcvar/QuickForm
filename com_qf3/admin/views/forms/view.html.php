@@ -58,7 +58,7 @@ class Qf3ViewForms extends JViewLegacy
 		}
 
 		JToolbarHelper::divider();
-		JToolbarHelper::help('JHELP_COMPONENTS_MESSAGING_INBOX');
+		JToolbarHelper::help('', false, '/administrator/index.php?option=com_qf3&task=help');
 
 		JHtmlSidebar::setAction('index.php?option=com_qf3&view=forms');
 	}

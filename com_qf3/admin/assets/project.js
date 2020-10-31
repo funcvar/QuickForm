@@ -52,10 +52,34 @@ jQuery(document).ready(function($) {
         calculatordesk();
     });
 
+
+    var disfiles = function () {
+        var fld1 = $('select[name="jform[addfiles]"]');
+        var fld2 = $('input[name="jform[reqfiles]"]');
+        var fld3 = $('input[name="jform[accept]"]:checked');
+        var fld4 = $('input[name="jform[whitelist]"]');
+        fld2.closest('.control-group').hide();
+        fld3.closest('.control-group').hide();
+        fld4.closest('.control-group').hide();
+        if(1*fld1.val()) {
+            fld2.closest('.control-group').show();
+            fld3.closest('.control-group').show();
+            if(1*fld3.val()) {
+                fld4.closest('.control-group').show();
+            }
+        }
+        fld1.add($('input[name="jform[accept]"]')).on('change',function(){
+            disfiles();
+        })
+    }
+    disfiles();
+
 });
 
 Joomla.submitbutton = function(task) {
-    if (task == 'project.cancel' || document.formvalidator.isValid(document.getElementById('project-form'))) {
-        Joomla.submitform(task, document.getElementById('project-form'));
+    var form = document.forms.qfadminForm;
+    var cancel = (task && task.indexOf('.cancel') > 0)?1:0;
+    if (cancel || document.formvalidator.isValid(form)) {
+        Joomla.submitform(task, form);
     }
 };

@@ -80,13 +80,13 @@ switch ($input->get('mod')) {
         if (!$msg) {
             $sent = $qfFilds->sendMail($project, $html, $stat);
             if (!$sent) {
-                $msg = JText::_('COM_QF_EMAIL_WAS_NOT_SENT');
+                $msg = JText::_('COM_QF_NOT_COMPLETED');
             }
         }
 
 
         if (!$msg) {
-            $msg = $qfFilds->mlangLabel($project->formparams->thnq_message);
+            $msg = $qfFilds->translate($project->formparams->thnq_message);
             $msgtype = 'message';
         } else {
             $msgtype = 'error';
@@ -97,6 +97,9 @@ switch ($input->get('mod')) {
         break;
     case 'ajaxminicart':
     {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+
         require_once JPATH_COMPONENT.'/classes/qfcart.php';
         $qfCart = new qfCart;
 
@@ -107,6 +110,9 @@ switch ($input->get('mod')) {
         break;
     case 'qfcart':
     {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+
         require_once JPATH_COMPONENT.'/classes/qfcart.php';
         $qfCart = new qfCart;
 
@@ -117,6 +123,9 @@ switch ($input->get('mod')) {
         break;
     case 'qfcartremrow':
     {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+
         require_once JPATH_COMPONENT.'/classes/qfcart.php';
         $qfCart = new qfCart;
 
@@ -127,6 +136,9 @@ switch ($input->get('mod')) {
         break;
     case 'qfcartchangerow':
     {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+
         require_once JPATH_COMPONENT.'/classes/qfcart.php';
         $qfCart = new qfCart;
 
@@ -137,6 +149,9 @@ switch ($input->get('mod')) {
         break;
     case 'updateminicart':
     {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+
         require_once JPATH_COMPONENT.'/classes/qfcart.php';
         $qfCart = new qfCart;
 
@@ -147,6 +162,9 @@ switch ($input->get('mod')) {
         break;
     case 'confirmCart':
     {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+
         require_once JPATH_COMPONENT.'/classes/qfcart.php';
         $qfCart = new qfCart;
 
@@ -155,4 +173,53 @@ switch ($input->get('mod')) {
         echo $html;
     }
         break;
+    case 'qfcartpromocod':
+    {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+
+        require_once JPATH_COMPONENT.'/classes/qfcart.php';
+        $qfCart = new qfCart;
+        echo $qfCart->qfcartpromocod();
+    }
+        break;
+    case 'showAttachmentBox':
+    {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+        if(!$qf_params->get('filesmod')) return 'attachment disabled';
+
+        require_once JPATH_COMPONENT.'/classes/attachment.php';
+        $qfCart = new qfAttachment;
+
+        $html = $qfCart->showAttachmentBox();
+
+        echo $html;
+    }
+        break;
+    case 'sessionLoading':
+    {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+        if(!$qf_params->get('filesmod')) return 'attachment disabled';
+
+        require_once JPATH_COMPONENT.'/classes/attachment.php';
+        $qfCart = new qfAttachment;
+
+        echo $qfCart->sessionLoading();
+    }
+        break;
+    case 'attachment_del_img':
+    {
+        $qf_params = JComponentHelper::getParams('com_qf3');
+        if(!$qf_params->get('shopmod')) return 'shopmod disabled';
+        if(!$qf_params->get('filesmod')) return 'attachment disabled';
+
+        require_once JPATH_COMPONENT.'/classes/attachment.php';
+        $qfCart = new qfAttachment;
+
+        echo $qfCart->attachment_del_img();
+    }
+        break;
+
 }

@@ -13,12 +13,12 @@ class qfEmail_tmpl extends qfEmail
     {
       $html = '';
       if (! $project->emailparams->showtitle) {
-          $html .= "\r\n" . $this->mlangLabel($project->title) . "\r\n\r\n";
+          $html .= "\r\n" . $project->title . "\r\n\r\n";
       }
 
       if ($project->emailparams->showurl) {
           $link = JFactory::getApplication()->input->get('root', '', 'STRING');
-          $html .= $this->mlangLabel('QF_SOURCE') . ': ' . $link . "\r\n\r\n";
+          $html .= 'QF_SOURCE' . ': ' . $link . "\r\n\r\n";
       }
 
       $html .= $this->getSimplRows($data);
@@ -34,34 +34,34 @@ class qfEmail_tmpl extends qfEmail
     protected function getSimplRows($data)
     {
         $html = '';
-        foreach ($data as $fild) {
-            if (! isset($fild->hide) || ! $fild->hide) {
-                if ($fild->teg == 'cloner') {
-                    foreach ($fild->data as $row) {
+        foreach ($data as $field) {
+            if ($field->hide != 1) {
+                if ($field->teg == 'cloner') {
+                    foreach ($field->data as $row) {
                         $html .= $this->getSimplRows($row);
                     }
-                } elseif ($fild->teg == 'qftabs') {
-                    $options = $fild->options;
+                } elseif ($field->teg == 'qftabs') {
+                    $options = $field->options;
                     for ($n = 0; $n < sizeof($options); $n ++) {
-                        $html .= "\r\n" . $this->mlangLabel($options[$n]->label) . "\r\n";
-                        $html .= $this->getSimplRows($fild->data[$n]);
+                        $html .= "\r\n" . $options[$n]->label . "\r\n";
+                        $html .= $this->getSimplRows($field->data[$n]);
                     }
-                } elseif ($fild->teg == 'customHtml') {
-                    $html .= $this->mlangLabel($fild->label) . "\r\n";
-                } elseif ($fild->teg == 'customPhp') {
-                    if ($fild->label) {
-                        $html .= $this->mlangLabel($fild->label) . "\r\n";
+                } elseif ($field->teg == 'customHtml') {
+                    $html .= $field->label . "\r\n";
+                } elseif ($field->teg == 'customPhp') {
+                    if ($field->label) {
+                        $html .= $field->label . "\r\n";
                     }
-                    $html .= $this->mlangLabel($fild->value) . "\r\n";
-                } elseif (isset($fild->hideone) && $fild->hideone) {
-                    if (isset($fild->data) && ! empty($fild->data)) {
-                        $html .= $this->getSimplRows($fild->data);
+                    $html .= $field->value . "\r\n";
+                } elseif ($field->hide == 3) {
+                    if (isset($field->data) && ! empty($field->data)) {
+                        $html .= $this->getSimplRows($field->data);
                     }
                 } else {
-                    $html .= $this->mlangLabel($this->letLable($fild)) . ' : ';
-                        $html .= $this->mlangLabel($fild->value) . "\r\n";
-                    if (isset($fild->data) && ! empty($fild->data)) {
-                        $html .= $this->getSimplRows($fild->data);
+                    $html .= $this->findLable($field) . ' : ';
+                        $html .= $field->value . "\r\n";
+                    if (isset($field->data) && ! empty($field->data)) {
+                        $html .= $this->getSimplRows($field->data);
                     }
                 }
             }

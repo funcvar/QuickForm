@@ -19,7 +19,8 @@ v 4.0.2
     return $.QuickForm3 = {
 
         initiate: function(form) {
-            var f = $(form), sd;
+            var f = $(form),
+                sd;
 
             $(window).on('resize', function() {
                 compact();
@@ -44,7 +45,6 @@ v 4.0.2
                 if (btn.length) btn.click();
                 else $('<button type="submit" style="display:none"></button>').appendTo(form).click();
             }
-
 
             form.qfaddtocart = function() {
                 if (typeof(QFcart) != 'object') {
@@ -120,11 +120,11 @@ v 4.0.2
             }
 
             function before_submit() {
-                if(sd && sd.ycounter) {
+                if (sd && sd.ycounter) {
                     var cs = (typeof window.Ya !== 'undefined') && window.Ya.Metrika.counters();
                     var yid = (cs && cs[0] && cs[0].id) || null;
-                    if(yid) {
-                        if(typeof window['yaCounter'+ yid] !== 'undefined') window['yaCounter'+ yid].reachGoal(sd.ycounter);
+                    if (yid) {
+                        if (typeof window['yaCounter' + yid] !== 'undefined') window['yaCounter' + yid].reachGoal(sd.ycounter);
                         else if (typeof ym !== 'undefined') ym(yid, 'reachGoal', sd.ycounter);
                     }
                 }
@@ -181,7 +181,7 @@ v 4.0.2
             function startRelated(filds) {
                 var fl;
                 $(filds).each(function() {
-                    fl=chekReq(this)||fl;
+                    fl = chekReq(this) || fl;
                     this.onchange = function() {
                         if (chekReq(this)) sumBox(form);
                     }
@@ -266,21 +266,9 @@ v 4.0.2
                 var captdiv = $('.qf_recaptcha', box);
                 activateCaptcha(captdiv, '.qfcap' + 't a');
 
-                var filelabel = function(el) {
-                    if (el.value) $('.filelabel', $(el).closest('.qffile')).addClass('filled');
-                    else $('.filelabel', $(el).closest('.qffile')).removeClass('filled');
-                }
-
-                $('input[name="inpfile[]"]', box).on('change', function() {
-                    filelabel(this);
-                });
-
                 $("input:reset", box).click(function() {
                     this.form.reset();
                     startRelated(fields);
-                    $('input[name="inpfile[]"]').each(function() {
-                        filelabel(this);
-                    });
                 });
 
                 $('input[type="text"],input[type="number"]', box).each(function() {
@@ -319,33 +307,98 @@ v 4.0.2
                     activateCalendar(this);
                 });
 
+                $('.customfile', box).each(function() {
+                    activateCustomfile(this);
+                });
+
                 sumBox(form);
-                $(form).trigger("qfnewbox",[box]);
+                $(form).trigger("qfnewbox", [box]);
+            }
+
+
+            function activateCustomfile(el) {
+                var inp = $('input[name="inpfile[][]"]', el)[0];
+                var extfortmb = ["image/png", "image/gif", "image/jpeg", "image/pjpeg", "image/svg+xml"];
+
+                var updateFileList = function(fileField, i) {
+                    let fileBuffer = Array.from(fileField.files);
+                    fileBuffer.splice(i, 1);
+                    const dT = new ClipboardEvent('').clipboardData || new DataTransfer();
+                    for (let file of fileBuffer) {
+                        dT.items.add(file);
+                    }
+                    fileField.files = dT.files;
+                    tmbs();
+                }
+
+                var tmbs = function() {
+                    var cmb = $('.customfilebox', el).html('');
+
+                    if (inp.files && inp.files[0]) {
+                        for (var i = 0; i < inp.files.length; i++) {
+
+                            if(window.FileReader && extfortmb.indexOf(inp.files[i].type)!=-1){
+                                var reader = new FileReader();
+                                reader.onload = (function (i, file) {
+                                     return function (e) {
+                                         var dbox = $('<div>').appendTo(cmb);
+                                         $('<img>').attr('src', e.target.result).appendTo(dbox);
+                                         $('✗'.link('#')).appendTo(dbox).click(function() {
+                                             updateFileList(inp, i);
+                                             return false;
+                                         });
+                                     }
+                                })(i, inp.files[i]);
+                                reader.readAsDataURL(inp.files[i]);
+                            }
+                            else {
+                                var dbox = $('<div>').appendTo(cmb);
+                                $('<div>').appendTo(dbox).html('<div title="'+inp.files[i].name+'">'+inp.files[i].name.split('.').pop()+'</div>');
+                                (function(i){
+                                    $('✗'.link('#')).appendTo(dbox).click(function() {
+                                        updateFileList(inp, i);
+                                        return false;
+                                    });
+                                })(i);
+                            }
+                        }
+                    }
+                }
+
+
+                $('.customfilebtn', el).on('click', function() {
+                    $(inp).click();
+                });
+                $(inp).on('change', function() {
+                    tmbs();
+                })
             }
 
 
             function activateStepper(e) {
-                var nxt = $(e), box = nxt.closest('.qfstepperinner'), prv = $('.qfprev',box);
-                if(!box.prev().length) prv.hide();
+                var nxt = $(e),
+                    box = nxt.closest('.qfstepperinner'),
+                    prv = $('.qfprev', box);
+                if (!box.prev().length) prv.hide();
                 else {
-                    prv.click(function () {
+                    prv.click(function() {
                         box.prev().show();
-                        $('input[name="qfstepper[]"]',box.prev()).val(0);
+                        $('input[name="qfstepper[]"]', box.prev()).val(0);
                         $.QuickForm3.verticallycentr(box, false);
                         box.remove();
                     });
                 }
                 var d = nxt.data('next');
-                if(!d) nxt.hide();
-                nxt.click(function () {
+                if (!d) nxt.hide();
+                nxt.click(function() {
                     var fl;
                     box.find("input,select,textarea").each(function() {
                         if (!this.checkValidity()) {
-                            fl=1;
+                            fl = 1;
                             return this.reportValidity();
                         }
                     });
-                    if(fl)return;
+                    if (fl) return;
                     $.ajax({
                         type: 'POST',
                         url: form.root.value,
@@ -356,10 +409,10 @@ v 4.0.2
                             id: d
                         },
                         success: function(html) {
-                            if(html){
+                            if (html) {
                                 var newbox = $('<div class="qfstepperinner"></div>').insertAfter(box);
                                 box.hide();
-                                $('input',nxt).val(1);
+                                $('input', nxt).val(1);
                                 schowRelated(newbox, html);
                             }
                         }
@@ -390,8 +443,8 @@ v 4.0.2
             function activateSlider(e) {
                 var inp = $('input[type="range"]', e);
                 var chosen = $('.slider_chosen', e);
-                var min = inp.attr('min');
-                var max = inp.attr('max');
+                var min = inp.attr('min')||0;
+                var max = inp.attr('max')||100;
                 var upd = function() {
                     var boxw = (inp.width() - chosen.width()) / (max - min);
                     var v = inp.val();
@@ -533,7 +586,7 @@ v 4.0.2
                 if (rows.length > 1) {
                     rows.children('.qfrem').find('a').css('opacity', 1);
                 }
-
+                console.log(row);
                 $('a', row.children('.qfadd')).on('click', function() {
                     rows = row.parent().children('.qfclonerrow');
                     if (!d.max || rows.length < d.max) {
@@ -566,16 +619,6 @@ v 4.0.2
                 };
 
                 if (form.calculatortype.value == 'default') {
-                    $('.qQfincluder').each(function() {
-                        var d = $(this).data('settings');
-                        if (d.condition) {
-                            d.istrue = '';
-                            var boxsum = qfCalculator_default($("input, select", this));
-                            if (boxsum != 'error') {
-                                d.istrue = eval(d.condition.replace(/s/g, boxsum.toFixed(10)));
-                            }
-                        }
-                    });
                     if ($('.qfclonesum span', form).length) {
                         $('.qfclonerrow').each(function() {
                             var cprice = qfCalculator_default($("input, select", this));
@@ -588,7 +631,7 @@ v 4.0.2
                     priceBox.each(function() {
                         var d = $(this).data('settings');
                         sum = round(sum, d.fixed);
-                        this.innerHTML = $.QuickForm3.strPrice(sum.toFixed(d.fixed),d.format);
+                        this.innerHTML = $.QuickForm3.strPrice(sum.toFixed(d.fixed), d.format);
                         $('input[name="qfprice[]"]', $(this).parent()).val(sum);
                     });
                     $(form).trigger("qfsetprice");
@@ -612,19 +655,19 @@ v 4.0.2
 
                     priceBox.each(function() {
                         var d = $(this).data('settings');
-                        var converter = function (fildid) {
+                        var converter = function(fieldid) {
                             let str = '';
-                            if (formuls[fildid]) {
-                                str = formuls[fildid].replace(/{(.*?)}/g, function(x) {
+                            if (formuls[fieldid]) {
+                                str = formuls[fieldid].replace(/{(.*?)}/g, function(x) {
                                     var rep = x.replace(/}|{/g, '');
-                                    return fieldsPatArr[rep] ? fieldsPatArr[rep] : '('+converter(rep)+')';
+                                    return fieldsPatArr[rep] ? fieldsPatArr[rep] : '(' + converter(rep) + ')';
                                 });
                             }
-                            return str.replace(/\(\)/g,'');
+                            return str.replace(/\(\)/g, '');
                         }
 
-                        if (formuls[d.fildid]) {
-                            var str = converter(d.fildid);
+                        if (formuls[d.fieldid]) {
+                            var str = converter(d.fieldid);
 
                             try {
                                 sum = eval(chekStr(str ? str : '0'));
@@ -636,7 +679,7 @@ v 4.0.2
                             }
 
                             sum = round(sum, d.fixed);
-                            this.innerHTML = $.QuickForm3.strPrice(sum.toFixed(d.fixed),d.format);
+                            this.innerHTML = $.QuickForm3.strPrice(sum.toFixed(d.fixed), d.format);
                             $('input[name="qfprice[]"]', $(this).parent()).val(sum);
                         }
                     });
@@ -674,9 +717,9 @@ v 4.0.2
                 var arr = [];
                 for (var i = 0; i < els.length; i++) {
                     var d = $(els[i]).data('settings');
-                    if (d && d.fildid) {
+                    if (d && d.fieldid) {
                         var add = getAdd(els[i]);
-                        if (add !== '') arr[d.fildid] = add;
+                        if (add !== '') arr[d.fieldid] = add;
                     }
                 }
                 return arr;
@@ -710,16 +753,15 @@ v 4.0.2
                             $(sums).each(function() {
                                 var pats = this.split(':');
                                 if (pats.length != 2) return;
-                                if (pats[0] == d.fildid) {
+                                if (pats[0] == d.fieldid) {
                                     var sum;
-                                    if(Number(pats[1]) == 1*pats[1]){
+                                    if (Number(pats[1]) == 1 * pats[1]) {
                                         sum = round(pats[1], d.fixed);
-                                    }
-                                    else{
+                                    } else {
                                         mesbox.html(pats[1]);
                                         sum = 0;
                                     }
-                                    priceBox[i].innerHTML = $.QuickForm3.strPrice(sum.toFixed(d.fixed),d.format);
+                                    priceBox[i].innerHTML = $.QuickForm3.strPrice(sum.toFixed(d.fixed), d.format);
                                 }
                             });
                         });
@@ -760,16 +802,17 @@ v 4.0.2
             }
         },
 
-        strPrice: function(x,format) {
-            var p,d;
-            if(format==0){
-                p=' ';d=',';
-            }
-            else if(format==1){
-                p=',';d='.';
-            }
-            else {
-                p='';d='.';
+        strPrice: function(x, format) {
+            var p, d;
+            if (format == 0) {
+                p = ' ';
+                d = ',';
+            } else if (format == 1) {
+                p = ',';
+                d = '.';
+            } else {
+                p = '';
+                d = '.';
             }
             var xs = ('' + x).split('.');
             var r = xs[0].charAt(0);
@@ -795,6 +838,10 @@ v 4.0.2
                 this.value = chbx.checked ? 1 : 0;
             });
 
+            $('input[name="inpfile[][]"]', form).each(function(i) {
+                this.name = 'inpfile['+i+'][]';
+            });
+
             $('input[name="qfcloner[]"]', form).each(function() {
                 var d = $(this).parent().data('settings');
                 if (d.orient) {
@@ -814,7 +861,9 @@ v 4.0.2
             box = box.closest('.qfmodalform');
             if (!box.length) return;
 
-            var getBodyScrollTop = function(){return self.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || (document.body && document.body.scrollTop)};
+            var getBodyScrollTop = function() {
+                return self.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || (document.body && document.body.scrollTop)
+            };
 
             $('.qfoverlay').css('height', $(document).height());
 
@@ -841,22 +890,22 @@ v 4.0.2
                         gbs = getBodyScrollTop(),
                         bot = box.offset().top,
                         t;
-                        setTimeout(function () {
-                            box.stop(false,true);
-                            if (bh < wh) {
-                                if ((bot - gbs) != (wh - bh) / 2) {
-                                    t = (wh - bh) / 2 + gbs;
-                                }
-                            } else {
-                                if ((bot - gbs + bh - wh) < 0)
-                                    t = gbs - bh + wh - 50;
-                                else if ((bot - gbs) > 0)
-                                    t = 50 + gbs;
+                    setTimeout(function() {
+                        box.stop(false, true);
+                        if (bh < wh) {
+                            if ((bot - gbs) != (wh - bh) / 2) {
+                                t = (wh - bh) / 2 + gbs;
                             }
-                            box.animate({
-                                'top': t
-                            }, 150, "linear");
-                        },150);
+                        } else {
+                            if ((bot - gbs + bh - wh) < 0)
+                                t = gbs - bh + wh - 50;
+                            else if ((bot - gbs) > 0)
+                                t = 50 + gbs;
+                        }
+                        box.animate({
+                            'top': t
+                        }, 150, "linear");
+                    }, 150);
                 }, false);
             }
         },
@@ -889,9 +938,9 @@ v 4.0.2
 
         qfstartModalform: function(d) {
             $('.qfoverlay').remove();
-            var over = $('<div class="qfoverlay over'+d.class+'"></div>').appendTo(document.body);
+            var over = $('<div class="qfoverlay over' + d.class + '"></div>').appendTo(document.body);
             var qfoverop = over.css('opacity');
-            var box = $('<div class="qfmodalform modal'+d.class+'"><div class="qfclose">×</div></div>').appendTo(document.body);
+            var box = $('<div class="qfmodalform modal' + d.class + '"><div class="qfclose">×</div></div>').appendTo(document.body);
 
             var boxclose = function() {
                 over.add(box).stop(true).animate({

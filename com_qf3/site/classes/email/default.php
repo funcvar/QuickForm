@@ -13,11 +13,11 @@ class qfEmail_tmpl extends qfEmail
     {
         $html = '';
         if (! $project->emailparams->showtitle) {
-            $html .= '<h3>' . $this->mlangLabel($project->title) . '</h3>';
+            $html .= '<h3>' . $project->title . '</h3>';
         }
         if ($project->emailparams->showurl) {
             $link = JFactory::getApplication()->input->get('root', '', 'STRING');
-            $html .= $this->mlangLabel('QF_SOURCE') . ': <a href="' . $link . '">'.$link.'</a><br><br>';
+            $html .= 'QF_SOURCE' . ': <a href="' . $link . '">'.$link.'</a><br><br>';
         }
         $html .= '<table border="1" width="100%" style="max-width:800px;border-color:#e7e7e7;" cellpadding="5" cellspacing="0">';
         $html .= $this->getRows($data);
@@ -31,28 +31,28 @@ class qfEmail_tmpl extends qfEmail
     protected function getRows($data)
     {
         $html = '';
-        foreach ($data as $fild) {
-            if (! isset($fild->hide) || ! $fild->hide) {
-                if ($fild->teg == 'cloner') {
-                    $html .= $this->getRowsCloner($fild);
-                } elseif ($fild->teg == 'qftabs') {
-                    $options = $fild->options;
+        foreach ($data as $field) {
+            if ($field->hide != 1) {
+                if ($field->teg == 'cloner') {
+                    $html .= $this->getRowsCloner($field);
+                } elseif ($field->teg == 'qftabs') {
+                    $options = $field->options;
                     for ($n = 0; $n < sizeof($options); $n ++) {
-                        $html .= '<tr><td colspan="2">' . $this->mlangLabel($options[$n]->label) . '</td></tr>';
-                        $html .= $this->getRows($fild->data[$n]);
+                        $html .= '<tr><td colspan="2">' . $options[$n]->label . '</td></tr>';
+                        $html .= $this->getRows($field->data[$n]);
                     }
-                } elseif ($fild->teg == 'customHtml') {
-                    $html .= '<tr><td colspan="2">' . $this->mlangLabel($fild->label) . '</td></tr>';
-                } elseif ($fild->teg == 'customPhp' && !$fild->label) {
-                    $html .= '<tr><td colspan="2">' . $this->mlangLabel($fild->value) . '</td></tr>';
-                } elseif (isset($fild->hideone) && $fild->hideone) {
-                    if (isset($fild->data) && ! empty($fild->data)) {
-                        $html .= $this->getRows($fild->data);
+                } elseif ($field->teg == 'customHtml') {
+                    $html .= '<tr><td colspan="2">' . $field->label . '</td></tr>';
+                } elseif ($field->teg == 'customPhp' && !$field->label) {
+                    $html .= '<tr><td colspan="2">' . $field->value . '</td></tr>';
+                } elseif ($field->hide == 3) {
+                    if (isset($field->data) && ! empty($field->data)) {
+                        $html .= $this->getRows($field->data);
                     }
                 } else {
-                    $html .= $this->getTr($fild);
-                    if (isset($fild->data) && ! empty($fild->data)) {
-                        $html .= $this->getRows($fild->data);
+                    $html .= $this->getTr($field);
+                    if (isset($field->data) && ! empty($field->data)) {
+                        $html .= $this->getRows($field->data);
                     }
                 }
             }
@@ -60,25 +60,25 @@ class qfEmail_tmpl extends qfEmail
         return $html;
     }
 
-    protected function getRowsCloner($fild)
+    protected function getRowsCloner($field)
     {
         $html = '';
         static $n = 1;
-        if (! empty($fild->data)) {
+        if (! empty($field->data)) {
             $html .= '<tr><td colspan="2">';
             $html .= '<table border="1" width="100%" style="border-color:#e7e7e7;" cellpadding="5" cellspacing="0">';
-            if ($fild->orient) {
+            if ($field->orient) {
                 $i = 0;
-                foreach ($fild->data as $row) {
+                foreach ($field->data as $row) {
                     if (! $i) {
                         $html .= '<tr>';
-                        if (isset($fild->numbering) && $fild->numbering) {
-                            $html .= '<th>' . $this->mlangLabel($fild->numbering) . '</th>';
+                        if (isset($field->numbering) && $field->numbering) {
+                            $html .= '<th>' . $field->numbering . '</th>';
                         }
                         foreach ($row as $item) {
-                            if (! isset($item->hide) || ! $item->hide) {
-                                if (! isset($item->hideone) || ! $item->hideone) {
-                                    $html .= '<th>' . $this->mlangLabel($item->label) . '</th>';
+                            if ($item->hide != 1) {
+                                if ($item->hide != 3) {
+                                    $html .= '<th>' . $item->label . '</th>';
                                 }
                             }
                         }
@@ -86,13 +86,13 @@ class qfEmail_tmpl extends qfEmail
                         $html .= '</tr>';
                     }
                     $html .= '<tr>';
-                    if (isset($fild->numbering) && $fild->numbering) {
+                    if (isset($field->numbering) && $field->numbering) {
                         $html .= '<td style="padding-left:10px">' . $n . '</td>';
                         $n ++;
                     }
                     foreach ($row as $item) {
-                        if (! isset($item->hide) || ! $item->hide) {
-                            if (! isset($item->hideone) || ! $item->hideone) {
+                        if ($item->hide != 1) {
+                            if ($item->hide != 3) {
                                 $html .= $this->getTdValCloner($item);
                             }
                         }
@@ -100,10 +100,10 @@ class qfEmail_tmpl extends qfEmail
                     $html .= '</tr>';
                 }
             } else {
-                foreach ($fild->data as $row) {
+                foreach ($field->data as $row) {
                     $html .= '<tr><td colspan="2">';
-                    if (isset($fild->numbering) && $fild->numbering) {
-                        $html .= '<div style="font:120% serif;padding:10px 0px 5px 10px;">'.$fild->numbering.' '. $n . '</div>';
+                    if (isset($field->numbering) && $field->numbering) {
+                        $html .= '<div style="font:120% serif;padding:10px 0px 5px 10px;">'.$field->numbering.' '. $n . '</div>';
                         $n ++;
                     }
                     $html .= '<table border="1" width="100%" style="border-color:#e7e7e7;" cellpadding="5" cellspacing="0">';
@@ -118,23 +118,23 @@ class qfEmail_tmpl extends qfEmail
         return $html;
     }
 
-    protected function getTr($fild)
+    protected function getTr($field)
     {
         $html = '';
         $html .= '<tr>';
-        $html .= '<td style="padding-left:10px">' . $this->mlangLabel($this->letLable($fild)) . '</td>';
-        $html .= '<td style="padding-left:10px">' . $this->mlangLabel($fild->value) . '</td>';
+        $html .= '<td style="padding-left:10px">' . $this->findLable($field) . '</td>';
+        $html .= '<td style="padding-left:10px">' . $field->value . '</td>';
         $html .= '</tr>';
         return $html;
     }
 
 
-    protected function getTdValCloner($fild)
+    protected function getTdValCloner($field)
     {
-        $html = '<td style="padding-left:10px">' . $this->mlangLabel($fild->value);
+        $html = '<td style="padding-left:10px">' . $field->value;
 
-        if (isset($fild->data) && ! empty($fild->data)) {
-            $html .= str_replace(array('<td','<tr','</td>','</tr>'), array('<span','<div',' </span>','</div>'), $this->getRows($fild->data));
+        if (isset($field->data) && ! empty($field->data)) {
+            $html .= str_replace(array('<td','<tr','</td>','</tr>'), array('<span','<div',' </span>','</div>'), $this->getRows($field->data));
         }
 
         $html .= '</td>';

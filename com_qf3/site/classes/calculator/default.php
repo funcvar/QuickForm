@@ -15,6 +15,7 @@ class qfCalculator_tmpl extends qfCalculator
     {
         $str = $this->getSumFrom($data);
         $str = $this->checkStr($str);
+        if(! $str) return array(0=>array(0, $this->sumdata));
 
         try {
             $sum = eval('$res=('. $str .');return $res;');
@@ -56,34 +57,6 @@ class qfCalculator_tmpl extends qfCalculator
             } elseif ($fild->teg == 'qftabs') {
                 foreach ($fild->data as $row) {
                     $str .= $this->getSumFrom($row);
-                }
-            } elseif ($fild->teg == 'qfincluder') {
-                $boxstr = $this->checkStr($this->getSumFrom($fild->data));
-                $boxres = '';
-
-                if ($fild->condition) {
-                    try {
-                        $boxsum = eval('$res=(' . $boxstr . ');return $res;');
-                    } catch (Throwable $t) {
-                        $boxsum = 'error';
-                        parent::qfErrormes('qfincluder error: '.$boxstr);
-                    } catch (Exception $e) {
-                        $boxsum = 'error';
-                        parent::qfErrormes('qfincluder error: '.$boxstr);
-                    }
-
-                    if (is_numeric($boxsum)) {
-                        $condition = str_replace('s', $boxsum, $fild->condition);
-                        $boxres = eval('$res=(' . $condition . ');return $res;');
-                    }
-                }
-
-                if ($boxres) {
-                    $str .= $fild->start;
-                    $str .= $boxstr;
-                    $str .= $fild->end;
-                } else {
-                    $str .= $boxstr;
                 }
             } elseif ($fild->teg == 'calculatorSum') {
                 $this->sumdata = $fild;

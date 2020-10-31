@@ -13,12 +13,12 @@ class qfEmail_tmpl extends qfEmail
     {
         $html = '';
         if (! $project->emailparams->showtitle) {
-            $html .= '<h3>' . $this->mlangLabel($project->title) . '</h3>';
+            $html .= '<h3>' . $project->title . '</h3>';
         }
 
         if ($project->emailparams->showurl) {
             $link = JFactory::getApplication()->input->get('root', '', 'STRING');
-            $html .= $this->mlangLabel('QF_SOURCE') . ': <a href="' . $link . '">'.$link.'</a><br><br>';
+            $html .= 'QF_SOURCE' . ': <a href="' . $link . '">'.$link.'</a><br><br>';
         }
 
         if ($project->calculatorparams->calculatortype) {

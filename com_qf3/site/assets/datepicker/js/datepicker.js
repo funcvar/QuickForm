@@ -717,6 +717,12 @@
             widget.DatePicker({
                 format: setinp.data('settings').format,
                 date: new Date(),
+                // onRender: function(date) {
+                //     var now= new Date();
+            	// 	return {
+            	// 		disabled: (date.valueOf() < now.valueOf())
+            	// 	}
+            	// },
                 onChange: function(formated, dates) {
                     inp.val(formated);
                     inp.css('background','#fff');

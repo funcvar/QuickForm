@@ -54,14 +54,14 @@ class qfCalculator_tmpl extends qfCalculator
         return $sumarr;
     }
 
-    protected function converter($fildid, $arr)
+    protected function converter($fieldid, $arr)
     {
         $str = '';
-        if(isset($this->formuls[$fildid])){
+        if(isset($this->formuls[$fieldid])){
             $str = preg_replace_callback('/{(.*?)}/', function ($m) use ($arr) {
                 $rep = isset($arr[0][$m[1]])?$arr[0][$m[1]]:'('.$this->converter($m[1], $arr).')';
                 return str_replace('{'.$m[1].'}', $rep, $m[0]);
-            }, $this->formuls[$fildid]);
+            }, $this->formuls[$fieldid]);
         }
         return str_replace('()','',$str);
     }
@@ -79,7 +79,7 @@ class qfCalculator_tmpl extends qfCalculator
                     $setsarray = array_merge($setsarray, $arr[1]);
                 }
             } elseif ($fild->teg == 'calculatorSum') {
-                $setsarray[$fild->fildid] = $fild;
+                $setsarray[$fild->fieldid] = $fild;
             } else {
                 if (isset($fild->math) && $fild->math !== '') {
                   if(str_replace(array('text','number','range','hidden'), '', $fild->teg) != $fild->teg){

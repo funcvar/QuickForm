@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="minicart">
+
+		<field name="pcsdir" type="radio" default="1" label="QF_CURRENCY_POS">
+			<option value="1">QF_BEFORE</option>
+			<option value="0">QF_AFTER</option>
+		</field>
+
+		<field name="pcs" type="text" label="QF_PCS" default="QF_PRICE_LABEL" translate_default="true"/>
+
+		<field name="img" type="text" default="/modules/mod_qf3/assets/imgs/cart_0.png" label="img:"/>
+
+    </fieldset>
+
+
+    <fieldset name="bigcart">
+
+        <field type="spacer" label="QF_BIGCART_LAB_1" class="title2"/>
+
+		<field name="text_before_cart" type="textarea" label="QF_BEFORE_CART" filter="safehtml"/>
+		<field name="text_after_cart_1" type="textarea" label="QF_AFTER_TABLE" filter="safehtml"/>
+		<field name="text_after_cart_2" type="textarea" label="QF_AFTER_CART" filter="safehtml"/>
+
+        <field type="spacer" label="QF_BIGCART_LAB_2" class="title2"/>
+
+		<field name="delivery" type="text" label="Delivery: (project id)"/>
+		<field name="payment" type="text" label="Payment: (project id)"/>
+		<field name="contacts" type="text" label="Contacts: (project id)" description="QF_BIGCART_LAB_4"/>
+
+		<field type="spacer" label="QF_BIGCART_LAB_3" class="title2"/>
+
+		<field name="text_1" type="text" default="QF_ORDER_PRICE" label="QF_ORDER_PRICE"/>
+		<field name="text_2" type="text" default="QF_FINAL_PRICE" label="QF_FINAL_PRICE"/>
+		<field name="text_3" type="text" default="QF_TO_ORDER" label="QF_TO_ORDER"/>
+		<field name="text_4" type="text" default="QF_SEND_ORDER" label="QF_SEND_ORDER"/>
+
+    </fieldset>
+
+
+    <fieldset name="emailset">
+
+        <field type="spacer" label="QF_BIGCART_LAB_1" class="title2"/>
+
+		<field name="text_before" type="textarea" label="QF_BEFORE_CART" filter="safehtml"/>
+		<field name="text_after" type="textarea" label="QF_AFTER_CART" filter="safehtml"/>
+
+        <field type="spacer" label="QF_EMAIL_LAB_1" class="title2"/>
+
+		<field name="toemail" type="text" size="40" label="QF_ALTER_EMAIL" description="QF_EMAIL_DESK"/>
+		<field name="subject" type="text" size="40" label="QF_SUBJECT"/>
+
+    </fieldset>
+
+
+    <fieldset name="discountset">
+
+        <field name="addfiles" type="disabledfiles" label="QF_ADD_FILES" default="0"/>
+        <field name="reqfiles" type="radio" label="QF_REQUIRED" default="0">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+        <field name="accept" type="radio" label="extens" default="0">
+			<option value="0">QF_ALL_FILES</option>
+			<option value="1">QF_WHITELIST</option>
+		</field>
+        <field name="whitelist" type="text" size="40" label="QF_LIST" default="jpg,png,gif"/>
+
+        <field type="spacer" label="QF_DISCOUNT_3" class="title2"/>
+
+		<field type="spacer" label="QF_DISCOUNT_EXAMPLE" class="title3"/>
+		<field name="discounts" type="textarea" label="QF_DISCOUNT_1" rows="6"/>
+		<field name="promocod" type="textarea" label="QF_DISCOUNT_2" rows="6"/>
+
+	</fieldset>
+
+
+    <fieldset name="params">
+
+        <field name="history" type="list" label="QF_RECORD_HISTORY" default="1">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+        <field name="redirect" type="text" label="redirect:"/>
+		<field name="popmess" type="textarea" default="QF_MESSAGE_INNER" label="QF_MESSAGE" translate_default="true"/>
+
+	</fieldset>
+
+</form>

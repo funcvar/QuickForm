@@ -11,12 +11,8 @@
 	<description></description>
 	<files>
 		<filename module="mod_qf3">mod_qf3.php</filename>
-		<folder>tmpl</folder>
-		<folder>css</folder>
+		<folder>assets</folder>
 		<folder>fields</folder>
-		<folder>imgs</folder>
-		<folder>js</folder>
-		<filename>helper.php</filename>
 		<filename>mod_qf3.xml</filename>
 	</files>
 	<help key=""/>

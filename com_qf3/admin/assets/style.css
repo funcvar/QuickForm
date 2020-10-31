@@ -12,14 +12,39 @@
 #qfmenu,
 #qfmenu ul {
   margin: 0;
-  padding: 0;
+  padding: 5px 1px;
   list-style: none;
-  background: #111;
+  background: #555;
   border-radius: 5px;
-  position: absolute;
+  position: fixed;
+  left: 5%;
+  top: 50%;
   font-size: 14px;
   width: 130px;
 }
+#qfmenu li.before {
+    border: 1px solid #fff;
+    position: absolute;
+    top: -4px;
+    right: -5px;
+    background: #fff;
+    border-radius: 1em;
+    padding: 2px;
+    width: 1em;
+    height: 1em;
+    display: block;
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1em;
+    box-sizing: border-box;
+}
+#qfmenu li.before:hover {
+    background: #fff;
+    color: red;
+}
+
 
 #qfmenu li {
   position: relative;
@@ -43,12 +68,13 @@
   display: none;
   top: -5px;
   left: 125px;
+  position: absolute;
   z-index: 99999;
   border: 2px solid #999;
 }
 
 #qfmenu li:hover {
-  background: #0186ba;
+  background: #30343e;
 }
 
 .formdiv {
@@ -100,7 +126,7 @@ textarea.customphp {
 }
 
 .qflabelclass {
-  width: 500px;
+  width: 560px;
 }
 
 .optionsBox a {
@@ -219,7 +245,7 @@ a.boxsave  {
 }
 
 .boxbodyinner hr {
-  margin: 5px 0;
+  margin: 3px 0;
 }
 
 .boxbodyinnerhelp {
@@ -232,15 +258,24 @@ a.boxsave  {
 .boxbodyinner span {
   font-weight: bold;
   color: #959595;
-  padding-right: 5px;
+  /* padding-right: 5px; */
+  padding-left: 5px;
+  min-width: 50px;
+  display: inline-block;
+}
+.hidediv span {
+  display: block;
+  margin: 5px 0 0 5px;
+}
+.qfreg {
+margin-bottom: -15px;
 }
 
 .qfsmoll{
-  float: right;
-  font-size: 0.7em;
+    font-size: 0.8em;
   position: relative;
-  margin-bottom: -1.6em;
-  color: #a17433;
+  color: #906036;
+  line-height: 1em;
 }
 .l_td textarea{
   color: coral;
@@ -260,7 +295,7 @@ a.boxsave  {
 
 
 .req {
-  background-color: #FFF4F4;
+  background-color: #fff8f8;
 }
 
 .calc {
@@ -268,7 +303,7 @@ a.boxsave  {
 }
 
 input.related {
-  border: 1px solid #747ae1 !important;
+  border: 2px solid #acb1ff !important;
 }
 
 .customfield {
@@ -291,8 +326,6 @@ input.qfrelatedclass {
     height: 28px;
     margin-left: 10px;
     margin-bottom: 10px;
-    background: #d5ffff;
-    border: 1px solid #bbb8fe;
 }
 .qfselectors {
     margin: 35px 10px 10px;
@@ -320,7 +353,7 @@ input.qfrelatedclass {
   }
 
   .qflabelclass {
-    width: 400px;
+    width: 480px;
   }
 
   .optionsBox input {
@@ -329,5 +362,10 @@ input.qfrelatedclass {
 
   .optionRow {
     padding: 3px 0 3px 5px;
+  }
+}
+@media screen and (max-width:800px) {
+  .qflabelclass {
+    width: 360px;
   }
 }

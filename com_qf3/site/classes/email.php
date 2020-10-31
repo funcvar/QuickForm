@@ -7,15 +7,15 @@
 
 defined('_JEXEC') or die();
 
-abstract class qfEmail
+abstract class qfEmail extends qfFilds
 {
     public static function getEmailHtml($project, $data, $calculator)
     {
-        $file = JPATH_COMPONENT.'/classes/email/'.$project->emailparams->tmpl.'.php';
+        $file = __DIR__.'/email/'.$project->emailparams->tmpl.'.php';
         if (file_exists($file)) {
             require_once($file);
         } else {
-            jexit('email template not found');
+            exit('email template not found');
         }
 
         $qfEmail_tmpl =  new qfEmail_tmpl;
@@ -23,21 +23,8 @@ abstract class qfEmail
         return $html;
     }
 
-    public function mlangLabel($val)
+    protected function findLable($field)
     {
-        if (strpos($val, 'QF_')===0) {
-            return JText::_($val);
-        }
-        return $val;
-    }
-
-    protected function letLable($field)
-    {
-        if (!$field->label) {
-            if (isset($field->placeholder) && $field->placeholder) {
-                return $field->placeholder;
-            }
-        }
-        return $field->label;
+        return $field->label ? $field->label : $this->get('placeholder', $field);
     }
 }

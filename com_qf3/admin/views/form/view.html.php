@@ -17,6 +17,7 @@ class Qf3ViewForm extends JViewLegacy
         $this->form  = $this->get('Form');
         $this->item  = $this->get('Item');
         $this->state = $this->get('State');
+        $this->qf_params = JComponentHelper::getParams('com_qf3');
 
         if (!$this->item->id) {
             $this->item->projectid = JFactory::getApplication()->input->getInt("projectid");
@@ -75,6 +76,6 @@ class Qf3ViewForm extends JViewLegacy
         JToolBarHelper::custom('addfild', 'iconaddfild', '', 'QF_ADD_FIELD', false);
 
         JToolbarHelper::divider();
-        JToolBarHelper::help('help', true);
+        JToolbarHelper::help('', false, '/administrator/index.php?option=com_qf3&task=help');
     }
 }

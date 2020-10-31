@@ -7,14 +7,14 @@
 defined('_JEXEC') or die;
 JFormHelper::loadFieldClass('list');
 
-class JFormFieldCartcss extends JFormFieldList
+class JFormFieldCssfile extends JFormFieldList
 {
-    protected $type = 'cartcss';
+    protected $type = 'Cssfile';
 
     protected function getOptions()
     {
 			$sections[] = JHTML::_('select.option',  'none', '');
-			$css  = scandir(JPATH_SITE.'/modules/mod_qf3/assets/css');
+			$css  = scandir(JPATH_COMPONENT_SITE.'/assets/css');
 			for ($i=0, $n=count($css); $i < $n; $i++) {
 				if(substr($css[$i], strrpos($css[$i], '.') + 1)=='css'){
 					$sections[] = JHTML::_('select.option',  $css[$i], $css[$i]);

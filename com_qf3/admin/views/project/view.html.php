@@ -76,7 +76,7 @@ class Qf3ViewProject extends JViewLegacy
 		}
 
 		JToolbarHelper::divider();
-		JToolBarHelper::help('help', true);
+		JToolbarHelper::help('', false, '/administrator/index.php?option=com_qf3&task=help');
 	}
 
 }
