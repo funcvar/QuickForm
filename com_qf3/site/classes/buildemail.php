@@ -633,6 +633,11 @@ class qfFilds
                 if (mb_substr(trim($v), 0, 1, "UTF-8") == '.') {
                     $this->errormes[] = JText::_('QF_ERR_FILE_NAME') . ': '. $v;
                 }
+
+                if(preg_replace('/[\/:*?"<>|+%!@]/', '', $v) != $v) {
+                    $this->errormes[] = JText::_('QF_ERR_FILE_NAME') . ': '. $v;
+                }
+
                 if ($extens) {
                     if (!in_array(strtolower(pathinfo($v, PATHINFO_EXTENSION)), $extens)) {
                         $this->errormes[] = JText::_('QF_ERR_FILE_EXT') . ': '. $v;

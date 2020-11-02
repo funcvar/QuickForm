@@ -60,6 +60,8 @@ class com_qf3InstallerScript
         $status->plugins = array();
         $status->component = $manifest;
 
+        if(!$this->migrate()) return 'error, sorry.';
+
         $plugins = $manifest->xpath('plugins/plugin');
         foreach ($plugins as $plugin) {
             $name = (string)$plugin->attributes()->plugin;
@@ -88,6 +90,7 @@ class com_qf3InstallerScript
             $status->modules[] = array('name' => $name, 'client' => $client, 'result' => $result);
         }
 
+        $this->end_migrate();
         $this->updateResults($status);
     }
 
@@ -333,5 +336,95 @@ class com_qf3InstallerScript
 				margin: 0 auto;
 			}
 			</style>';
+    }
+
+    private function end_migrate() {
+        if(!isset($this->oldparams)) return;
+
+        $captchaplugin = JPluginHelper::getPlugin('captcha', 'recaptcha');
+        $captchaparams = new JRegistry();
+        $captchaparams->loadString($captchaplugin->params);
+        $pubkey = $captchaparams->get('public_key', '');
+        $private_key = $captchaparams->get('private_key', '');
+        $theme = $captchaparams->get('theme2', 'light');
+        if($pubkey && $private_key) {
+            $params = JComponentHelper::getParams('com_qf3');
+            $params->set('sitekey', $pubkey);
+            $params->set('serverkey', $private_key);
+            $params->set('recaptcha_theme', $theme);
+
+            $db = JFactory::getDBO();
+            $query = $db->getQuery(true);
+
+            $query->update('#__extensions AS a');
+            $query->set('a.params = ' . $db->quote((string)$params));
+            $query->where('a.element = "com_qf3"');
+
+            $db->setQuery($query);
+            $db->query();
+        }
+
+        $arr = array('pcsdir','pcs','img','text_before_cart','text_after_cart_1','text_after_cart_2','delivery','payment', 'contacts','text_1','text_2','text_3','text_4','redirect','text_before','text_after','history','toemail','subject','popmess');
+        foreach ($arr as $ar) {
+            $data[$ar] = $this->oldparams->get($ar);
+        }
+        file_put_contents(JPATH_SITE.'/administrator/components/com_qf3/helpers/shopconfig.json', json_encode($data, \JSON_UNESCAPED_UNICODE));
+    }
+
+    private function migrate() {
+
+        $xml = JFactory::getXML(JPATH_ADMINISTRATOR .'/components/com_qf3/qf3.xml');
+        $version = preg_replace("/[^0-9]/", '', (string)$xml->version);
+        if($version[0] != '1') return true;
+
+        $this->oldparams = JComponentHelper::getParams('com_qf3');
+
+        $db = JFactory::getDBO();
+        $db->setQuery('SELECT * FROM #__qf3_forms');
+        $forms = $db->loadObjectList();
+        foreach ($forms as $form) {
+
+            $fields = json_decode($form->fields);
+            $fl = false;
+            foreach ($fields as &$field) {
+                if(isset($field->custom)) {
+                    if(isset($field->class) && $field->class) {
+                        $field->custom .= ' class="'.$field->class.'"';
+                        $fl = true;
+                    }
+                    if(isset($field->placeholder) && $field->placeholder) {
+                        $field->custom .= ' placeholder="'.$field->placeholder.'"';
+                        $fl = true;
+                    }
+                    if(isset($field->value) && $field->value) {
+                        $field->custom .= ' value="'.$field->value.'"';
+                        $fl = true;
+                    }
+                    if(isset($field->required) && $field->required) {
+                        $field->custom .= ' required';
+                        $fl = true;
+                    }
+                    if(isset($field->checked) && $field->checked) {
+                        $field->custom .= ' checked';
+                        $fl = true;
+                    }
+                    if(isset($field->cbxhide) && $field->cbxhide) {
+                        $field->hide = $field->cbxhide;
+                        $fl = true;
+                    }
+                    if(isset($field->hideone) && $field->hideone) {
+                        $field->hide = '3';
+                        $fl = true;
+                    }
+                }
+            }
+
+            if($fl) {
+                $fields = json_encode($fields, \JSON_UNESCAPED_UNICODE);
+                $db->setQuery('UPDATE #__qf3_forms SET fields='.$db->Quote($fields).' WHERE id='.(int) $form->id);
+                if(!$db->execute()) return false;
+            }
+        }
+        return true;
     }
 }

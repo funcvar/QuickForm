@@ -110,6 +110,9 @@ class qfAttachment extends qfCart
                         return JText::_('QF_ERR_FILE_EXT') . ' ' . $file;
                     }
                 }
+                if(preg_replace('/[\/:*?"<>|+%!@]/', '', $file) != $file) {
+                    return JText::_('QF_ERR_FILE_NAME') . ': '. $file;
+                }
 
                 $files[] = array('name' => $file, 'tmp_name' => $_FILES['imagefile']['tmp_name'][$k]);
             }
