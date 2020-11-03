@@ -47,7 +47,7 @@
 	</languages>
 
 	<administration>
-		<menu>QuickForm3</menu>
+		<menu>QF_QUICKFORM3</menu>
 		<submenu>
 			<menu view="projects">QF_PROGECTS_LIST</menu>
 			<menu view="statistics">QF_HISTORY</menu>
