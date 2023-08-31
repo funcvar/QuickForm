@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="top">
+		<field name="st_title" type="text" label="Title" required="true" class="title"/>
+	</fieldset>
+
+	<fieldset name="details">
+		<field name="id" type="text" readonly="true" class="readonly" label="id"/>
+		<field name="st_status" type="historystatus" label="Status"/>
+		<field name="st_desk" type="textarea" label="QF_NOTE"/>
+	</fieldset>
+</form>

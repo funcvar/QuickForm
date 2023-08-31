@@ -1,0 +1,710 @@
+/**
+ * @package		Joomla & QuickForm
+* @Copyright ((c) plasma-web.ru
+        */
+
+.qf3form.default {
+    padding: 4em 0;
+    background: #fff;
+}
+
+.qf3form.default * {
+    margin: 0;
+    box-sizing: border-box;
+    max-width: none;
+    font-size: 1em;
+    line-height: 1em;
+}
+
+.qf3form.default .qf3 {
+    padding: 0 0 1.2em 0;
+}
+
+.qf3form.default .qf3label {
+    display: inline-block;
+    padding: 0 1em 0 0;
+    text-align: right;
+    width: 38%;
+    font-size: 86%;
+}
+
+.qf3form.default .qf3txt input, .qf3form.default select, .qf3form.default textarea {
+    display: inline-block;
+    width: 52%;
+    background: #fff;
+    padding: 0.6em;
+    border: 1px solid #8e8e8e;
+    border-radius: 0.3em;
+    font-size: 82%;
+    vertical-align: middle;
+}
+
+.qf3form.default .qf3labelreq {
+    padding-left: 0.1em;
+}
+
+/*modal form*/
+.qf3form.default.qfoverlay {
+    background-color: #000000;
+    opacity: 0.8;
+}
+
+.qf3form.default.qfmodalform {
+    padding: 0;
+    background-color: #fff;
+    left: 19%;
+    width: 62%;
+}
+
+.qf3form.default.qfmodalform.compact {
+    left: 2%;
+    width: 96%;
+}
+
+.qf3form.default .qfclose {
+    position: absolute;
+    top: 7px;
+    right: 5px;
+    cursor: pointer;
+    color: #ff0000;
+    font-size: 24px;
+}
+
+/*ajax form*/
+.qf3form.default .qfajaxres {
+    position: relative;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px;
+}
+
+/* message */
+.qf3form.default .qfmess span {
+    padding: 1em;
+    margin: 1em;
+    display: block;
+}
+
+/* radio */
+.qf3form.default .radioblok {
+    display: inline-block;
+}
+
+.qf3form.default .qfradio.ver .qf3label {
+    vertical-align: top;
+}
+
+.qf3form.default .qfradio.ver .radioblok label {
+    display: block;
+    white-space: nowrap;
+    line-height: 0;
+    height: 1em;
+    margin: -0.6em 0 0.3em 1.6em;
+}
+
+.qf3form.default .qfradio.hor .radioblok label {
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0 1em 0 0.5em;
+}
+
+.qf3form.default .qfradio.hor .radioblok input {
+    vertical-align: middle;
+}
+
+/* textarea */
+.qf3form.default textarea {
+    height: 10em;
+    vertical-align: top;
+}
+
+/* checkbox */
+.qf3form.default .qfcheckbox input,
+.qf3form.default .qfbackemail input {
+    margin: 0 0.5em 0 0;
+    vertical-align: middle;
+}
+
+.qf3form.default .qfchkbx {
+    display: inline-block;
+    width: 61%;
+}
+
+/* hidden */
+.qf3form.default .qfhidden {
+    display: none;
+}
+
+/* button */
+.qf3form.default .qf3btn input {
+    border: 1px solid #8d8d8d;
+    border-radius: 2em;
+    padding: 0.4em 1em;
+    font-size: 86%;
+    background: #fff;
+    cursor: pointer;
+}
+.qf3form.default .qf3btn input:hover {
+    background: #f0f0f0;
+}
+
+/* file */
+.qf3form.default .qffile input {
+    max-width: 38%;
+    display: inline-block;
+    border: 0;
+    padding: 0.3em;
+}
+
+.qf3form.default .filelabel {
+    padding-left: 1em;
+}
+
+/* customfile */
+.qf3form.default .customfile svg {
+    width: 1.8em;
+    vertical-align: middle;
+    cursor: pointer;
+    color: #0074e9;
+}
+
+.qf3form.default .customfile svg:hover {
+    color: #5ea7f1;
+}
+
+.qf3form.default .customfilebox {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 38%;
+}
+
+.qf3form.default .customfilebox>div {
+    padding: 5px;
+    position: relative;
+    height: 38px;
+    box-sizing: content-box;
+    margin: 15px 5px 5px 0;
+}
+
+.qf3form.default .customfilebox>div>div {
+    width: 30px;
+    height: 100%;
+    border: 3px solid #0074e9;
+    background: #fff;
+    border-radius: 5px;
+    position: relative;
+}
+
+.qf3form.default .customfilebox>div>div>div {
+    width: 30px;
+    max-width: 30px;
+    height: 1em;
+    margin-top: 62%;
+    margin-left: -3px;
+    background: #fff;
+    font-size: 11px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.qf3form.default .customfilebox>div>div::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    border: 7px solid transparent;
+    border-color: #e3fffe #e3fffe #0074e9 #0074e9;
+}
+
+.qf3form.default .customfilebox img {
+    height: 100%;
+}
+
+.qf3form.default .customfilebox a {
+    position: absolute;
+    top: -3px;
+    right: -5px;
+    color: red;
+    display: block;
+    text-decoration: none;
+}
+
+.qf3form.default .customfilebox a:hover {
+    color: #000;
+}
+
+.qf3form.default .customfilemes {
+    margin-left: 38%;
+    font-size: 78%;
+    color: #252727;
+}
+
+.qf3form.default .customfilemes.qfinline {
+    margin: 0;
+    display: inline;
+    padding-left: 10px;
+}
+
+/* recaptcha */
+.qf3form.default .qf_recaptcha {
+    display: inline-block;
+}
+
+/* link */
+.qf3form.default .qfcapt {
+    text-align: right;
+}
+
+.qf3form.default .qfcapt a {
+    color: #CCC;
+    font-size: 10px;
+    padding: 1em 2em;
+}
+
+.qf3form.default .nfl {
+    display: none;
+}
+
+/* qfcalculatorsum */
+.qf3form.default .qfcalculatorsum {
+    font-size: 1.5em;
+}
+
+.qf3form.default .qfpriceinner {
+    margin-right: 0.3em;
+}
+
+.qf3form.default .qfunitinner {
+    margin-right: 2px;
+}
+
+/* cloner vertically */
+.qf3form.default .qfcloner.ver>.qfclonerrow {
+    position: relative;
+    border: 1px solid #CCC;
+    padding: 2em 0;
+    margin: 5px;
+}
+
+.qf3form.default .ver>.qfclonerrow>.qfadd a,
+.qf3form.default .ver>.qfclonerrow>.qfrem a,
+.qf3form.default .ver>.qfclonerrow>.qfclonesum {
+    position: absolute;
+    top: 5px;
+    text-decoration: none;
+    right: 4rem;
+}
+
+.qf3form.default .ver>.qfclonerrow>.qfadd a {
+    right: 2rem;
+    color: #00F;
+    font-size: 2em;
+}
+
+.qf3form.default .ver>.qfclonerrow>.qfrem a {
+    right: 0.5rem;
+    color: #F00;
+    font-size: 2em;
+}
+
+/* cloner horizontally */
+.qf3form.default .qfcloner.hor table {
+    width: 100%;
+}
+
+.qf3form.default .qfcloner.hor table td, .qf3form.default .qfcloner.hor table th {
+    padding: 1px;
+    text-align: center;
+}
+
+.qf3form.default td.qfadd,
+.qf3form.default td.qfrem {
+    width: 2em;
+}
+
+.qf3form.default .qfcloner.hor table td.qfclonesum {
+    padding-left: 20px;
+}
+
+.qf3form.default td.qfadd a, .qf3form.default td.qfrem a {
+    color: #07731b;
+    font-size: 2em;
+    display: block;
+    text-decoration: none;
+}
+
+.qf3form.default td.qfrem a {
+    color: #F00;
+}
+
+.qf3form.default .qfcloner.hor .qf3label {
+    display: block;
+    text-align: left;
+    width: 100%;
+}
+
+.qf3form.default .qfcloner.hor .qf3txt input,
+.qf3form.default .qfcloner.hor textarea,
+.qf3form.default .qfcloner.hor select {
+    width: 100%;
+}
+
+/*qftabs*/
+.qf3form.default .qftabslabel {
+  font-size: 1.5em;
+  margin: 10px;
+}
+
+.qf3form.default .qftabs {
+    margin: 10px;
+}
+
+.qf3form.default .qftabsitemlabel {
+    cursor: pointer;
+    border: 1px solid #c3c1c3;
+    padding: 5px;
+}
+
+.qf3form.default .qftabsitem {
+    border: 1px solid #c3c1c3;
+    padding: 10px;
+}
+
+.qf3form.default .qftabs.ver {
+    display: flex;
+}
+
+.qf3form.default .ver .qftabactiv {
+    border-right: 0;
+    background: #fff;
+    position: relative;
+    margin-right: -1px;
+}
+
+.qf3form.default .ver .qftabslabelsbox {
+    width: 38%;
+}
+
+.qf3form.default .ver .qftabsitem {
+    width: 62%;
+}
+
+.qf3form.default .hor .qftabslabelsbox {
+    display: flex;
+}
+
+.qf3form.default .hor .qftabactiv {
+    border-bottom: 0;
+    background: #fff;
+    position: relative;
+    margin-top: -4px;
+    top: 1px;
+}
+
+/* qf_number */
+.qf3form.default .qf_number_inner {
+    display: inline-block;
+    max-width: 120px;
+    width: 100%;
+    position: relative;
+}
+
+.qf3form.default .qf_number input {
+    width: 100%;
+    height: 2.4em;
+    padding: .375em .75em;
+    border: 1px solid #c4c4c4;
+    -moz-appearance: textfield;
+}
+
+.qf3form.default .qf_number button {
+    border: 1px solid #c4c4c4;
+    background: #fff;
+    height: 50%;
+}
+
+.qf3form.default .qf_number button:hover {
+    background-color: #f3f3f3;
+}
+
+.qf3form.default .qf_number input::-webkit-inner-spin-button,
+.qf3form.default .qf_number input::-webkit-outer-spin-button {
+    appearance: none;
+}
+
+.qf3form.default .qf_number.ver input {
+    padding-right: 3em;
+}
+
+.qf3form.default .qf_number.ver .number__controls {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 2.5em;
+}
+
+.qf3form.default .qf_number.ver .qfdown {
+    margin-top: -1px;
+    border-width: 1px 1px 0 1px;
+}
+
+.qf3form.default .qf_number.hor input {
+    text-align: center;
+}
+
+.qf3form.default .qf_number.hor button {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    width: 2.5em;
+    line-height: 100%;
+}
+
+.qf3form.default.compact .qf_number.hor button {
+    width: 25%;
+}
+
+.qf3form.default .qf_number.hor .qfup {
+    right: 0;
+}
+
+/* qf_range */
+.qf3form.default .qfslider_inner {
+    width: 38%;
+    position: relative;
+    display: inline-block;
+    margin: 2em 0;
+    padding: 0 20px;
+    font-size: 75%;
+}
+
+.qf3form.default .qfslider .slider_min {
+    position: absolute;
+    left: 0;
+}
+
+.qf3form.default .qfslider .slider_max {
+    position: absolute;
+    right: 0;
+}
+
+.qf3form.default .qfslider .slider_chosen {
+    position: relative;
+    top: -1em;
+    width: 26px;
+    height: 1em;
+    text-align: center;
+    margin-left: -6.5px;
+}
+
+.qf3form.default .qfslider input[type=range] {
+    appearance: none;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    margin-left: -5px;
+    cursor: pointer;
+}
+
+.qf3form.default .qfslider input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 1px;
+    background: #807a7a;
+    border: 1px solid #ccc;
+}
+
+.qf3form.default .qfslider input[type=range]::-webkit-slider-thumb {
+    border: 1px solid #918e8e;
+    height: 26px;
+    width: 26px;
+    border-radius: 50%;
+    background: #ffffff;
+    -webkit-appearance: none;
+    margin-top: -12.5px;
+}
+
+.qf3form.default .qfslider input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 1px;
+    background: #807a7a;
+    border: 1px solid #ccc;
+}
+
+.qf3form.default .qfslider input[type=range]::-moz-range-thumb {
+    border: 1px solid #918e8e;
+    height: 26px;
+    width: 26px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+/* qf_checkbox */
+
+.qf3form.default .qf_checkbox .qf3label {
+    margin: 1.8em 0 0 0;
+}
+
+.qf3form.default .qf_checkbox .qfempty {
+    margin: 0;
+}
+
+.qf3form.default .qf_checkbox input {
+    position: absolute;
+    z-index: -1;
+}
+
+.qf3form.default .qf_checkbox .chbxlabel {
+    position: relative;
+    padding: 0.3em 0 0 4em;
+    cursor: pointer;
+    font-size: 82%;
+}
+
+.qf3form.default .qf_checkbox .chbxlabel:before {
+    content: '';
+    font-size: 80%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3.7em;
+    height: 1.8em;
+    border: 0;
+    border-radius: 1em;
+    background: #CDD1DA;
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, .2);
+    transition: .2s;
+}
+
+.qf3form.default .qf_checkbox .chbxlabel:after {
+    content: '';
+    font-size: 80%;
+    position: absolute;
+    top: 0.1em;
+    left: 0.1em;
+    width: 1.6em;
+    height: 1.5em;
+    border: 0;
+    border-radius: 1em;
+    background: #FFF;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+    transition: .2s;
+}
+
+.qf3form.default .qf_checkbox input:checked+.chbxlabel:before {
+    background: #51af7c;
+}
+
+.qf3form.default .qf_checkbox input:checked+.chbxlabel:after {
+    left: 2em;
+}
+
+/* calendar */
+.qf3form.default .double {
+    display: inline-block;
+}
+
+.qf3form.default .single {
+    display: inline-block;
+    width: 38%;
+}
+
+.qf3form.default .qfcalendar input {
+    width: 100%;
+}
+
+.qf3form.default .double_inner,
+.qf3form.default .qf_date_inner {
+    display: flex;
+    justify-content: space-between;
+}
+
+.qf3form.default .double .qf_date {
+    width: 48%;
+}
+
+.qf3form.default .qf_calen {
+    position: relative;
+    z-index: 999;
+}
+
+.qf3form.default .widgetCalendar {
+    position: absolute;
+    left: 0;
+    height: 0px;
+    overflow: hidden;
+    width: 100%;
+    min-width: 180px;
+}
+
+.qf3form.default .qf_date_a {
+    display: block;
+    padding: 0 1.2em;
+    background-image: url(../datepicker/images/calendar.png);
+    background-size: 100% 100%;
+    width: 3em;
+}
+
+/* stepper */
+.qf3form.default .qfstepper {
+    position: relative;
+    border: 1px solid;
+}
+
+.qf3form.default .qfstepperinner {
+    padding: 1em 1em 2em;
+}
+
+.qf3form.default .qfstepper .qfprev,
+.qf3form.default .qfstepper .qfnext {
+    position: absolute;
+    padding: 0 1em;
+    border: 1px solid;
+    bottom: 1em;
+    cursor: pointer;
+    opacity: 0.4;
+}
+
+.qf3form.default .qfstepper .qfprev {
+    left: 1em;
+}
+
+.qf3form.default .qfstepper .qfnext {
+    right: 1em;
+}
+
+/* compact */
+.qf3form.default.compact .qf3label {
+    width: 100%;
+    text-align: left;
+}
+
+.qf3form.default.compact .qfcalculatorsum .qf3label {
+    display: inline;
+}
+
+.qf3form.default.compact .qf3txt input,
+.qf3form.default.compact .qfsubmit input,
+.qf3form.default.compact textarea,
+.qf3form.default.compact .qfchkbx,
+.qf3form.default.compact .qfslider_inner,
+.qf3form.default.compact .qf_number_inner,
+.qf3form.default.compact .double,
+.qf3form.default.compact .qf_date,
+.qf3form.default.compact .single,
+.qf3form.default.compact select {
+    width: 100%;
+}
+.qf3form.default.compact .double_inner {
+    display: block;
+}
+
+.qf3form.default .qfhide {
+    width: 1px;
+    overflow: hidden;
+    display: inline-block;
+    opacity: 0;
+}

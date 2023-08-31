@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="show" label="QuickForm">
+
+		<field name="version" type="version" label="QuickForm version:"/>
+
+		<field name="filesmod" type="radio" default="0" label="QF_UPLOAD_FILES" description="QF_UPLOAD_FILES_DESCR" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+
+		<field name="shopmod" type="radio" default="0" label="QF_SHOPMOD" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+
+		<field name="display" type="radio" default="0" label="QF_REFERENCE_TO_THE_AUTHOR" class="vertical">
+			<option value="0">QF_SIMPLE</option>
+			<option value="1">QF_INVISIBLE</option>
+			<option value="2">QF_REMOVE</option>
+		</field>
+
+		<field name="cod" type="text" label="QF_ENTER_THE_CODE" id="formcod"/>
+		<field name="donation" type="donation" />
+	</fieldset>
+
+	<fieldset name="services" label="QF_SERVICES">
+		<field name="recaptcha" type="recaptcha" />
+
+		<field name="recaptcha_theme" type="radio" default="light" label="QF_THEME" class="radioyesno">
+			<option value="light">Light</option>
+			<option value="dark">dark</option>
+		</field>
+
+		<field name="recaptcha_show" type="radio" default="0" label="QF_SHOW" class="radioyesno">
+			<option value="0">QF_ALL</option>
+			<option value="1">QF_GUEST</option>
+		</field>
+
+		<field name="sitekey" type="text" label="QF_SITEKEY" />
+
+		<field name="serverkey" type="text" label="QF_SERVERKEY" />
+	</fieldset>
+
+	<fieldset name="additional" label="QF_ADDITIONAL_OPTIONS">
+		<field name="cors" type="radio" default="0" label="QF_CORS_L" description="QF_CORS_D" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+
+		<field name="unlogged" type="radio" default="0" label="QF_UNLOGGED_L" description="QF_UNLOGGED_D" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+
+	</fieldset>
+</form>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="details">
+		<field name="id" type="text" label="ID" description="QF_FIELD_ID_DESC" class="readonly" default="0" readonly="true"/>
+		<field name="title" type="text" label="Title" description="QF_TITLE_DESC_FORM" required="true" class="title"/>
+	</fieldset>
+</form>

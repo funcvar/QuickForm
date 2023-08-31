@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+
+	<fieldset name="top" label="">
+		<field name="title" type="text" label="Title" description="QF_TITLE_DESC_PROJ" required="true" class="title"/>
+	</fieldset>
+
+	<fieldset name="general">
+		<field name="id" type="text" label="ID" description="QF_FIELD_ID_DESC" class="readonly" default="0" readonly="true"/>
+		<field name="published" type="radio" label="QF_STATE" class="radioyesno" default="1">
+			<option value="0">QF_UNPUBLISHED</option>
+			<option value="1">QF_PUBLISHED</option>
+		</field>
+		<field name="access" type="accesslevel" label="QF_ACCESS" description="QF_ACCESS_DESC"/>
+		<field name="language" type="contentlanguage" label="QF_LANGUAGE"/>
+		<field name="hits" type="text" label="QF_HITS" description="QF_HITS_DESK" class="readonly" default="0" readonly="true"/>
+	</fieldset>
+
+	<fieldset name="formparams">
+		<field name="csschoose" type="radio" label="QF_STYLES" default="y" class="radioyesno">
+			<option value="y">QF_CHOOSE</option>
+			<option value="n">QF_CREATE</option>
+		</field>
+		<field type="filelist" name="p][cssform" default="default.css" label="QF_SELECT_CSS_FILE" directory="assets/css" fileFilter="(.*).css" hide_none="false" class="cssform" />
+
+		<field name="createcssfile" type="text" label="QF_CSS_FILE_NAME" description="QF_FOR_EXAMPLE_CSS" class="createcssfile"/>
+		<field name="copycssfile" type="checkbox" label="QF_COPY_DEFAULT_CSS" value="1" class="copycssfile" checked="true"/>
+
+		<field type="filelist" name="p][jsform" default="qf3.js" label="QF_JS" directory="assets/js" fileFilter="(.*).js" hide_none="true" />
+
+		<field name="p][modal" type="radio" label="QF_MODAL" default="0" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="p][modallink" type="text" label="QF_MODAL_LINK"/>
+		<field name="p][ajaxform" type="radio" label="QF_AJAX" default="0" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="p][qfkeepalive" type="radio" label="Keepalive" description="QF_KEEPALIVE" default="0" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="p][thnq_message" type="textarea" label="QF_MESSAGE" default="QF_MESSAGE_INNER" translate="true"/>
+		<field name="p][msgtmpl" type="radio" label="QF_MSGTMPL" default="0" class="qfradio">
+			<option value="0">QF_TEMPLATE</option>
+			<option value="1">QuckForm</option>
+		</field>
+	</fieldset>
+
+	<fieldset name="emailparams">
+		<field name="p][toemail" type="text" label="QF_ALTER_EMAIL" description="QF_EMAIL_DESK"/>
+		<field name="p][subject" type="text" label="QF_SUBJECT"/>
+		<field name="p][tmpl" type="tmpllist" label="QF_LETTER_TMPL" default="default"/>
+		<field name="p][showurl" type="radio" label="QF_SHOWURL" default="1" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="p][start_text" type="textarea" label="QF_EMAIL_START_TEXT" description="QF_EMAIL_START_TEXT_DEF"/>
+		<field name="p][final_text" type="textarea" label="QF_EMAIL_FINAL_TEXT"/>
+	</fieldset>
+
+	<fieldset name="calculatorparams">
+		<field name="p][calculatortype" type="radio" label="QF_CALCULATOR_TYPE" class="radioyesno" default="0">
+			<option value="0">No</option>
+			<option value="default">default</option>
+			<option value="multipl">multiple</option>
+			<option value="simple">simple</option>
+			<option value="custom">custom</option>
+		</field>
+		<field name="calculatordesk" type="calculatordesk" class="calculatordesk"/>
+		<field name="p][calcformula" type="textarea" label="QF_CALCULATOR_FORMUL" class="calcformula"/>
+	</fieldset>
+
+	<fieldset name="params">
+		<field name="p][history" type="radio" label="QF_RECORD_HISTORY" default="1" class="radioyesno">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+	</fieldset>
+
+</form>

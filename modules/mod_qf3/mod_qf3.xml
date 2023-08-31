@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.1" client="site" method="upgrade">
+	<name>mod_qf3</name>
+	<author>funcvar</author>
+	<creationDate>2012</creationDate>
+	<copyright>Copyright (C) plasma-web.ru. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>funcvar@gmail.com</authorEmail>
+	<authorUrl>plasma-web.ru</authorUrl>
+	<version>3.9.01</version>
+	<updateservers>
+		<server type="extension" priority="1" name="QuickForm">http://plasma-web.ru/downloads/qf_v3/update.xml</server>
+	</updateservers>
+	<files>
+		<filename module="mod_qf3">mod_qf3.php</filename>
+		<folder>fields</folder>
+		<filename>mod_qf3.xml</filename>
+		<filename>qf_mod.js</filename>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldpath="/modules/mod_qf3/fields">
+				<field type="addscript"/>
+				<field name="mod_type" type="radio" default="0" label="Mod type" class="qfmodtype">
+					<option value="0">Work as form</option>
+					<option value="1">Work as cart</option>
+				</field>
+				<field name="id" type="text" class="formfilds" required="" label="project id: *"/>
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+				<field name="cache" type="list" default="1" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+				<field name="cache_time" type="text" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" description="COM_MODULES_FIELD_CACHE_TIME_DESC"/>
+				<field name="cachemode" type="hidden" default="static">
+					<option value="static"></option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

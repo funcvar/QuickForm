@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="content" client="site" method="upgrade">
+	<name>plg_content_qf3</name>
+	<creationdate>29-05-2012</creationdate>
+	<author>funcvar</author>
+	<copyright>(c) plasma-web.ru</copyright>
+	<authoremail>funcvar@gmail.com</authoremail>
+	<authorurl>http://plasma-web.ru</authorurl>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<version>3.9.01</version>
+	<description><![CDATA[Display QuickForm 3 in content<br />format: {QF3=xx}<br /><br /><a href='http://plasma-web.ru'>http://plasma-web.ru</a>]]></description>
+	<updateservers>
+		<server type="extension" priority="1" name="QuickForm">http://plasma-web.ru/downloads/qf_v3/update.xml</server>
+	</updateservers>
+	<files>
+		<filename plugin="qf3">qf3.php</filename>
+	</files>
+	<config>
+		<fields name="params">
+		</fields>
+	</config>
+</extension>

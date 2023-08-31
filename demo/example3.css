@@ -1,0 +1,359 @@
+/**
+* @Copyright ((c) plasma-web.ru
+*/
+
+.qf3form.example3 {
+    padding: 4em 1em 2em;
+    background: #fff;
+    border-radius: 2em;
+    margin: 2em auto;
+    max-width: 620px;
+    border: 1px solid #00a0ff;
+}
+
+.qf3form.example3 * {
+    margin: 0;
+    box-sizing: border-box;
+    max-width: none;
+    font-size: 1em;
+    line-height: 1rem;
+}
+
+.qf3form.example3 .qf3 {
+    padding: 0 0 2em 0;
+}
+
+.qf3form.example3 .qf3label {
+    display: inline-block;
+    padding: 0 28px 0 0;
+    text-align: right;
+    width: 38%;
+    font-family: fantasy;
+    vertical-align: middle;
+    color: #13516a;
+    line-height: 1em;
+}
+
+.qf3form.example3 hr {
+    width: 82%;
+    margin: 0 auto 3em;
+    border: 1px dashed #c7d7e1;
+}
+
+.qf3form.example3 sup {
+    font-size: 0.6em;
+}
+
+.qf3form.example3 .qf_centr {
+    font-size: 80%;
+    padding: 0 0 0.7em;
+    margin-left: 38%;
+}
+
+/*modal form*/
+.qf3form.example3.qfoverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000000;
+    opacity: 0.8;
+    z-index: 9990;
+    margin: 0;
+}
+
+.qf3form.example3.qfmodalform {
+    padding: 0;
+    background-color: #fff;
+    position: absolute;
+    top: 0;
+    left: 16%;
+    width: 62%;
+    z-index: 9999;
+
+}
+
+.qf3form.example3.qfmodalform.compact {
+    left: 2%;
+    width: 96%;
+}
+
+/*ajax form*/
+.qf3form.example3 .qfajaxres {
+    position: relative;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px;
+}
+
+
+/* message */
+.qf3form.example3 .qfmess span {
+    padding: 1em;
+    margin: 1em;
+    display: block;
+}
+
+.qf3form.example3 .qfclose {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+    color: #ff0000;
+    font-size: 24px;
+}
+
+/* radio */
+.qf3form.example3 .radioblok {
+    display: inline-block;
+}
+
+.qf3form.example3 .radioblok label {
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0 1em 0 0;
+    border: 1px solid #0091b4;
+    background: #fff;
+    padding: 0.4em 20px;
+    border-radius: 1em;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.qf3form.example3 .radioblok label:hover {
+    background: #cbfff4;
+}
+
+.qf3form.example3 .radioblok input[type=radio]:checked+label {
+    background: #cbfff4;
+    cursor: example3;
+}
+
+.qf3form.example3 .qfradio .radioblok input {
+    display: none;
+}
+
+
+/* link */
+.qf3form.example3 .qfcapt {
+    text-align: right;
+}
+
+.qf3form.example3 .qfcapt a {
+    color: #CCC;
+    font-size: 10px;
+    padding: 1em 2em;
+}
+
+.qf3form.example3 .nfl {
+    display: none;
+}
+
+/* qfcalculatorsum */
+.qf3form.example3 .qfcalculatorsum {
+    font-size: 1.2em;
+    padding-bottom: 0.5em;
+}
+
+.qf3form.example3 .qfcalculatorsum .qf3label {
+    font-size: 0.9em;
+    padding: 0 0.5em 0.3em 0;
+    vertical-align: baseline;
+}
+
+.qf3form.example3 .qfunitinner {
+    font-size: 0.8em;
+    padding: 0 0.3em;
+}
+
+/* qf_range */
+.qf3form.example3 .qfslider {
+    margin: 1em 0 1em 0;
+}
+
+.qf3form.example3 .qfslider_inner {
+    width: 56%;
+    position: relative;
+    display: inline-block;
+    font-size: 0.6em;
+}
+
+.qf3form.example3 .slider_min {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #0074a3;
+}
+
+.qf3form.example3 .slider_max {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #0074a3;
+}
+
+.qf3form.example3 .slider_chosen {
+    position: relative;
+    top: -1em;
+    width: 26px;
+    height: 1em;
+    text-align: center;
+}
+
+.qf3form.example3 .qfslider input[type=range] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    height: 2px;
+}
+
+.qf3form.example3 .qfslider input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 1px;
+    cursor: pointer;
+    background: #08a07d;
+    border: 0;
+}
+
+.qf3form.example3 .qfslider input[type=range]::-webkit-slider-thumb {
+    border: 1px solid #08a07d;
+    height: 26px;
+    width: 26px;
+    border-radius: 13px;
+    background: #cbfff4;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -12.5px;
+}
+
+.qf3form.example3 .qfslider input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 1px;
+    cursor: pointer;
+    background: #08a07d;
+    border: 0;
+}
+
+.qf3form.example3 .qfslider input[type=range]::-moz-range-thumb {
+    border: 1px solid #08a07d;
+    height: 26px;
+    width: 26px;
+    border-radius: 13px;
+    background: #cbfff4;
+    cursor: pointer;
+}
+
+.qf3form.example3 .qfslider input[type=range]::-moz-focus-outer {
+    border: 0;
+}
+
+.qf3form.example3 .qfslider input[type=range]::-ms-track {
+    width: 100%;
+    height: 1px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+.qf3form.example3 .qfslider input[type=range]::-ms-fill-lower,
+.qf3form.example3 .qfslider input[type=range]::-ms-fill-upper {
+    background: #08a07d;
+    border: 0;
+}
+
+.qf3form.example3 .qfslider input[type=range]::-ms-thumb {
+    border: 1px solid #08a07d;
+    height: 26px;
+    width: 26px;
+    border-radius: 13px;
+    background: #cbfff4;
+    cursor: pointer;
+    height: 1px;
+}
+
+
+/* qf_number */
+.qf3form.example3 .qf_number_inner {
+    display: inline-block;
+    width: 7.5em;
+    position: relative;
+}
+
+.qf3form.example3 .qf_number input {
+    width: 100%;
+    height: 2.4em;
+    border: 1px solid #2cae90;
+    -moz-appearance: textfield;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+.qf3form.example3 .qf_number input:focus {
+    outline: 0;
+}
+
+.qf3form.example3 .qf_number button {
+    border: 1px solid #2cae90;
+    background: #e0fff8;
+    font-size: 1.2em;
+    position: absolute;
+    height: 100%;
+    top: 0px;
+    width: 2em;
+    padding: 0;
+    z-index: 1;
+    cursor: pointer;
+    color: #000;
+}
+
+.qf3form.example3 .qf_number button:hover {
+    background-color: #cbfff4;
+}
+
+.qf3form.example3 .qf_number input::-webkit-inner-spin-button,
+.qf3form.example3 .qf_number input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.qf3form.example3 .qf_number .qfup {
+    right: 0;
+}
+
+.qf3form.example3 .qf_number .qfdown {
+    left: 0;
+}
+
+
+
+/* compact */
+.qf3form.example3.compact .qf3label {
+    width: 100%;
+    text-align: left;
+    padding-bottom: 1em;
+}
+
+.qf3form.example3.compact .qfcalculatorsum .qf3label {
+    display: inline;
+}
+
+.qf3form.example3.compact .qf3txt input,
+.qf3form.example3.compact .qfsubmit input,
+.qf3form.example3.compact .qfslider_inner {
+    width: 100%;
+}
+
+.qf3form.example3.compact hr {
+    display: none;
+}
+
+.qf3form.example3.compact .qf_number button {
+    width: 25%;
+}

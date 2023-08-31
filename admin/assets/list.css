@@ -1,0 +1,555 @@
+/**
+* @Copyright ((c) plasma-web.ru
+        * @license    GPLv2 or later
+        */
+
+#wpwrap {
+    background: #fff;
+}
+
+.qf3_toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+    background: #fff;
+}
+
+.qf3_toolbar_cell {
+    margin-right: 10px;
+}
+
+.qf3_toolbar_cell_right {
+    flex-grow: 1;
+    text-align: right;
+}
+
+.qf3_toolbar a {
+    border: 1px solid #adb5bd;
+    text-decoration: none;
+    padding: 5px 12px;
+    margin: 5px 0;
+    font-size: 18px;
+    line-height: 24px;
+    color: #4c4b4b;
+    font-weight: normal;
+    border-radius: 5px;
+}
+
+.qf3_toolbar a:hover {
+    text-decoration: none;
+}
+
+.qf3_toolbar a.help {
+    margin-right: 1em;
+}
+.qf3_toolbar a.help:hover {
+    background: #0080ff;
+}
+
+.helpbox {
+    position: relative;
+    padding: 1em;
+    margin: 1em;
+}
+
+.qf3_toolbar a.fa::before {
+    margin-right: 7px;
+    /* font-size: 12px; */
+}
+
+a.fa.add::before, a.fa.savecreate::before {
+    content: "\f067";
+}
+
+a.fa.activate::before {
+    content: "\f00c";
+}
+
+a.fa.deactivate::before, a.fa.delete::before, a.fa.close::before, a.fa.closetofields::before  {
+    content: "\f00d";
+}
+
+a.fa.save::before, a.fa.saveclose::before {
+    content: "\f0c7";
+}
+
+a.fa.help::before {
+    content: "\f128";
+}
+
+a.fa.red::before {
+    color: #c52827;
+}
+
+a.fa.green::before {
+    color: #2f7d32;
+}
+
+a.fa.green:hover {
+    background: #2f7d32;
+}
+
+a.fa.red:hover {
+    background: #c52827;
+}
+
+.qf3_toolbar a.fa.gray:hover, .qf3_toolbar a.fa.gray:hover:before {
+    color: #000;
+    background: #f5fff9;
+}
+
+.qf3_toolbar a.fa:hover {
+    color: #fff;
+}
+
+.qf3_toolbar a.fa:hover:before {
+    color: #fff;
+}
+
+.qf3_filters {
+    background: #f2f2f2;
+    padding: 5px;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.qf3_filter {
+    margin-right: 5px;
+    display: flex;
+}
+
+.qf3_filter .searchbtn {
+    color: #ffffff;
+    background: #3d618f;
+    /* height: 100%; */
+    border-radius: 5px;
+    margin-left: 2px;
+    border: 1px solid #cdcdcd;
+    /* padding: 0 10px; */
+}
+
+.qf3_filter .searchbtn::before {
+    content: "\f002";
+}
+
+.qf3_filter input, .qf3_filter select {
+    border: 1px solid #8c959d;
+    padding: 5px 10px;
+    font-size: 16px !important;
+    /* line-height: 24px; */
+    color: #535960;
+    border-radius: 5px;
+    background: #fff;
+    width: auto;
+    height: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+a.qfdisabled {
+    pointer-events: none;
+    cursor: default;
+    color: #b4b4b4;
+}
+
+.qf_form_style * {
+    box-sizing: border-box;
+}
+
+.qf_form_style {
+    /* background: #f0f4fb; */
+    /* padding: 10px; */
+}
+
+.qffieldlabel {
+    display: inline-block;
+    width: 38%;
+    vertical-align: top;
+    padding: 0.5em 3em 0 0;
+    text-align: right;
+}
+
+.qffieldbody {
+    display: inline-block;
+    width: 62%;
+}
+
+.req {
+    padding-left: 1em;
+}
+
+input.title {
+    width: 100%;
+    height: 2.6em !important;
+}
+
+.desk {
+    font-size: 80%;
+    color: #858383;
+}
+
+.qf_form_style .qftabs {
+    margin: 10px 0;
+    background: #fff;
+    width: 100%;
+}
+.qf_sheet {
+    margin: 10px 0;
+    background: #fff;
+    width: 100%;
+    padding: 40px 20px;
+}
+
+.qf_form_style .qftabsitemlabel {
+    cursor: pointer;
+    border: 1px solid #c3c1c3;
+    padding: 5px;
+}
+
+.qf_form_style .qftabsitem {
+    border: 1px solid #c3c1c3;
+    padding: 10px;
+}
+
+.qf_form_style .hor .qftabslabelsbox {
+    display: flex;
+    background: #f9fbfe;
+}
+
+.qf_form_style .hor .qftabactiv {
+    border-bottom: 0;
+    background: #fff;
+    position: relative;
+    margin-top: -4px;
+    top: 1px;
+}
+
+.qfprojectpage {
+    display: flex;
+    margin-top: 15px;
+}
+
+.qfprojectpage input[type=text],
+.qfprojectpage select,
+.qfprojectpage textarea {
+    width: 100%;
+    max-width: 100%;
+    height: 2.5em;
+}
+
+.colright .qffieldlabel, .colright .qffieldbody {
+    display: block;
+    width: 100%;
+    padding: 0;
+    text-align: left;
+}
+
+.colright>div {
+    background: #fff;
+    margin: 10px 0px 10px 20px;
+    padding: 10px;
+}
+
+.box_title .qffieldlabel {
+    width: 18%;
+    box-sizing: border-box;
+}
+
+.box_title .qffieldbody {
+    width: 82%;
+}
+
+.qffield {
+    margin: 24px 0;
+}
+
+.box_radioyesno label {
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 1px;
+    display: inline-block;
+    background: #e3e3e3;
+    max-width: 50%;
+}
+
+.box_radioyesno input {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    pointer-events: none;
+}
+
+.box_radioyesno label.checked {
+    background-color: #158d2c;
+    color: #fff;
+}
+
+.box_radioyesno label.lab1.checked {
+    background-color: #7b7b7b;
+}
+
+.colright .box_radioyesno .qffieldbody {
+    display: flex;
+}
+
+.box_qfradio label {
+    margin-right: 15px;
+    padding: 0.5em;
+}
+
+.qfradio {
+    margin-right: 0.5em !important;
+    vertical-align: middle;
+}
+
+.box_calculatordesk .qffieldbody {
+    width: 100%;
+}
+
+.box_calculatordesk pre {
+    font-size: 86%;
+}
+
+.qfprojectpage textarea {
+    height: 5em;
+}
+
+.qftable {
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.qftable th, .qftable td {
+    padding: 9px 5px;
+    border: 1px solid #d7ede1;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.qftable th {
+    white-space: nowrap;
+    width: 5%;
+}
+
+.qftable tbody tr {
+    background-color: #fafcfc;
+}
+
+.qftable tbody tr:nth-of-type(odd) {
+    background-color: #f5f9f9;
+}
+
+.qftable tbody tr:hover {
+    background-color: #ecf0f0;
+}
+
+a.fa {
+    /* text-decoration: none; */
+}
+
+.qftable .fa {
+    padding-left: 0.6em;
+}
+
+.formstyle input[type=submit] {
+    display: none;
+}
+
+.qftable .qftitle {
+    text-align: left;
+    width: 50%;
+}
+
+.qftable a.fa-check, .qftable a.fa-times {
+    color: #049067;
+    border: 1px solid #049067;
+    border-radius: 1em;
+    display: flex;
+    text-decoration: none;
+    width: 30px;
+    height: 26px;
+    padding: 0px;
+    align-items: center;
+    justify-content: center;
+}
+
+.qftable a.fa-times {
+    color: #bc0404;
+    border: 1px solid #bc0404;
+}
+
+.fa.defgray, .fa.defgreen {
+    color: #e1c8c8;
+    border: 1px solid #5a5a5a;
+    border-radius: 1em;
+    padding: 0.2em;
+}
+
+.fa.defgreen, .fa.defgray:hover {
+    color: #049067;
+    border: 1px solid #049067;
+    background: #f2fff6;
+}
+
+#pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#pagination a {
+    margin: 0 0.4em;
+    display: inline-block;
+    color: #426b87;
+    text-decoration: none;
+}
+
+#pagination a:hover {
+    color: #000;
+}
+
+#pagination span {
+    padding: 0 0.4em;
+    font-weight: bold;
+    color: #4c564d;
+}
+
+.qfbreadcrumbs {
+    margin: 20px 0;
+    font-size: 96%;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    background: #f8fffb;
+}
+
+.qfempty {
+    margin: 40px 0;
+    border: 1px solid #ccc;
+    padding: 60px;
+}
+
+.qfmessbox {
+    margin: 10px 0;
+    position: relative;
+}
+
+.qfmessbox h3 {
+    margin: 1px 0;
+    font-size: 1em;
+}
+
+.qfmessboxclose {
+    color: #e11010;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+}
+
+.qfmessage, .qferrormess {
+    background: #edfff6;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+}
+
+.qferrormess {
+    background: #ffeded;
+}
+
+.box_vertical label {
+    display: block;
+    margin: 10px 0;
+}
+
+.box_top3em .qffieldbody {
+    margin-top: -3em;
+}
+
+.smol {
+    font-size: 80%;
+    white-space: nowrap;
+}
+.qf3_filter .filled {
+    background: #e6fff4 !important;
+}
+
+@media screen and (max-width:800px) {
+    .qfprojectpage {
+        display: block;
+    }
+
+    .qffieldlabel, .qffieldbody {
+        width: 100%;
+        text-align: left;
+    }
+
+    .colright>div {
+        margin: 0;
+    }
+
+    .colright {
+        width: 100%;
+    }
+
+    .box_title .qffieldbody {
+        width: 100%;
+    }
+}
+
+/* joomla 3 */
+.qfwrap {
+    position: relative;
+}
+.subhead-collapse {
+    display: none;
+}
+.j-sidebar-container {
+    margin: 0 !important;
+}
+.qf3_toolbar .close, .qf3_toolbar .close:hover {
+    opacity: 1;
+}
+
+
+
+/* joomla 4 menu */
+.main-nav a.mm-active.qfmenuitem {
+    background-color: #085225;
+}
+.qfmenuitem::before {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    padding-right: 0.3em;
+    margin-top: -0.2em;
+}
+li .qfmenuitem.qfprojects::before {
+    content: '\f24d';
+    color: #b0beb1;
+}
+li .qfmenuitem.qfshop::before {
+    content: '\f07a';
+    color: #bbfaab;
+}
+li .qfmenuitem.qfattachment::before {
+    content: '\f07b';
+    color: #fed9d9;
+}
+li .qfmenuitem.qfhistorys::before {
+    content: '\f1da';
+    color: #93f0ff;
+}
+li .qfmenuitem.qfsettings::before {
+    content: '\f013';
+    color: #fff;
+}
+
+
+
+body .subhead {
+    min-height: 1px;
+    padding: 0;
+    margin: 0;
+}

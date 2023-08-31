@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" method="upgrade">
+	<name>com_qf3</name>
+	<creationDate>2020-10-31</creationDate>
+	<author>funcvar</author>
+	<authorEmail>funcvar@gmail.com</authorEmail>
+	<authorUrl>http://plasma-web.ru/</authorUrl>
+	<copyright>(C) 2011-2020 plasma-web.ru</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<version>3.3.04</version>
+	<description>Joomla Form Creator</description>
+	<scriptfile>script.php</scriptfile>
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+
+	<updateservers>
+		<server type="extension" priority="1" name="QuickForm">http://plasma-web.ru/downloads/qf_v3/update.xml</server>
+	</updateservers>
+
+	<modules>
+		<module folder="modules" module="mod_qf3" name="QuickForm" client="site"/>
+	</modules>
+
+	<plugins>
+		<plugin folder="plugins" plugin="qf3" name="QuickForm" group="content"/>
+	</plugins>
+
+	<files folder="site">
+		<folder>assets</folder>
+		<folder>classes</folder>
+		<folder>language</folder>
+		<filename>classes.php</filename>
+		<filename>controller.php</filename>
+		<filename>qf3.php</filename>
+	</files>
+
+	<administration>
+		<menu>COM_QF3</menu>
+		<submenu>
+			<menu view="projects">QF_PROGECTS_LIST</menu>
+			<menu view="shop">QF_SHOP_SETTINGS</menu>
+			<menu view="attachment">QF_ATTACHMENT_SETTINGS</menu>
+			<menu view="historys">QF_HISTORY</menu>
+			<menu view="settings">QF_GLOBAL_SETTINGS</menu>
+		</submenu>
+		<files folder="admin">
+			<filename>qf3.php</filename>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<folder>assets</folder>
+			<folder>forms</folder>
+			<folder>helpers</folder>
+			<folder>language</folder>
+			<folder>sql</folder>
+			<folder>src</folder>
+			<folder>tmpl</folder>
+		</files>
+	</administration>
+</extension>
